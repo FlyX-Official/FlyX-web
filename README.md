@@ -17,7 +17,7 @@ cd into server/src directory and do `nodemon app`
 If you're doing first time setup/get an error, do `npm install -g nodemon` and then `npm install` before doing `nodemon app`
 
 ### Start Front-End Vue dev server
-cd into client directory and do `npm run dev`
+cd into client directory and do `npm run serve`
 
 If you're doing first time setup/get an error, do `npm install` before doing `npm run dev`
 
