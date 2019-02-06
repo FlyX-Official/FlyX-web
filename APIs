@@ -1,0 +1,22 @@
+| ---------- Gmail Account ---------- |
+ |__ ID: wefly0818@gmail.com
+   |__ Pass : Ablindfalcon
+
+| ---------- Skiplagged wrapper for NodeJs ----------|
+ https://github.com/iguanahotsauce/Node_Skiplagged_API
+  |__API KEY -- [ ]
+ 
+ | ---------- PRIVATE API KEYS ---------- |
+ https://aviation-edge.com/
+  |__ Seems to have a Nearby Airports API
+    |__API KEY -- [ 840b3d-7c3833 ]
+  
+| ---------- IATA wrapper for NodeJS ---------- |
+https://www.npmjs.com/package/iatacodes
+Documentation 
+  |__https://iatacodes.org/#/get_started
+    |__API KEY -- [ 700876e0-99a5-40a3-8430-04b961b8e10a ]
+
+|---------- Location IQ - Map Engine ----------|
+https://locationiq.com/docs#maps
+  |__API KEY -- [  2ee624ef806e1a  ]
