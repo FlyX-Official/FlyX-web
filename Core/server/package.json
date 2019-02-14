@@ -20,6 +20,6 @@
     "moment": "^2.22.2",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.5",
-    "skiplagged-node-api": "^0.1.0"
+    "skiplagged-api-wrapper": "^1.0.0"
   }
 }
