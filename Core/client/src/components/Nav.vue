@@ -4,12 +4,29 @@
       <a href="/"><img src="../assets/flightsniffer.svg"></a>
     </div>-->
     <form class="search-form" @submit.prevent="send()">
-      <input type="text" required id="from-input" v-model="searchData.from" name="from" placeholder="From">
-      <input type="text" required id="to-input" v-model="searchData.to" name="to" placeholder="To">
+      
+      <autocomplete 
+      :show="6"
+      v-model="searchData.from"
+      :id="fromInput"
+      placeholder="From"
+      >
+      </autocomplete>
+      
+      <autocomplete 
+      :show="6"
+      v-model="searchData.to"
+      :id="toInput"
+      placeholder="To"
+      >
+      </autocomplete>
+      
+     <!-- <input type="text" required id="from-input" @keyup.prevent="autocomplete()" v-model="searchData.from" name="from" placeholder="From">
+      <input type="text" required id="to-input" @keyup.prevent="autocomplete()" v-model="searchData.to" name="to" placeholder="To"> -->
       <input type="range" name="radius" v-model="searchData.radiusTo" id="radius-from" value="50" min="1" max="50" class="slider">
       <p id="radius-from-disp">{{ searchData.radiusTo }} miles</p>
       <input type="range" name="radius" v-model="searchData.radiusFrom" id="radius-to" value="50" min="1" max="50" class="slider">
-      <p id="radius-to-disp">{{ searchData.radiusFrom }} miles</p>
+      <p id="radius-to-disp">{{ searchData.radiusFrom }} miles</p> 
       <!--<output name="radiusValue" id="radiusValueID">24</output>-->
        <!-- the vCalendar, see documentation https://docs.vcalendar.io/#welcome-to-v-calendar -->
       <!-- available dates adds contraint to calendar -->
@@ -36,6 +53,7 @@
         show-caps>
       </v-date-picker>
       <div id="submit-input"><input type="image" src="../assets/submit-btn.svg" alt="" class="submit-button"></div>
+      
     </form>
   <!--<span>{{ searchData }}</span>-->
   </div>
@@ -47,8 +65,12 @@
   // We have to import our base URL connection to the server first.
   // (This is done using Axios...view the Api.js file to see this)
   import Api from '@/services/Api'
+  import autocomplete from '@/components/Autocomplete'
 
   export default {
+    components: {
+      autocomplete
+    },
     data() {
       return {
         // searchData is the object that exists in our nav component 
@@ -69,6 +91,8 @@
               opacity: 0.3,
           }
         },
+        fromInput : 'from-input',
+        toInput : 'to-input'
       }
     },
     methods: {
@@ -77,6 +101,7 @@
         
         this.$root.$emit('startedSearch');
 
+        // do post request
         Api().post('/search', this.searchData)
           .then(response => {
             // This line sends(emits) the ticket data as an event. Other components

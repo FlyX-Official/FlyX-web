@@ -146,6 +146,38 @@ app.post('/search', (req, res) => {
   
 });
 
+// autocomplete search endpoint
+app.get('/autocomplete', function (req, res) {
+
+ let body = {
+
+      suggest: {
+          airportNames: {
+              text: req.query['q'],
+              completion: {
+                  field: 'Combined',
+              }
+          }
+      }
+  } 
+
+
+  client.search({
+          index: 'vue-elastic',
+          body: body,
+          // type: 'characters_list'
+      })
+      .then(results => {
+          res.send(results.suggest.airportNames[0].options);
+        //  console.log(results.suggest.airportNames[0].options);
+      })
+      .catch(err => {
+          console.log(err)
+          res.send([]);
+      }); 
+
+});
+
 
 /* ******************************************************************************
 * This function takes the return data of elasticsearch radius search and 
@@ -181,7 +213,7 @@ function matchAirports(sourceAirports, destAirports) {
       // push local matchup into local array
       airportCodePairs.push(matchup);
       count++;
-      console.log(`${count} : {${matchup.sourceCode}->${matchup.destCode}`);
+      // console.log(`${count} : {${matchup.sourceCode}->${matchup.destCode}`);
     }
   }
 
@@ -342,7 +374,7 @@ function getSkiplagged(sourceAirport, destAirport, sourceGeohash, destGeohash, y
       if (response == 'undefined' || response == 'null' || response == ''){
         return ticket;
       }else{
-        console.log(`{${ticket.from}->${ticket.to} : ${response[0].price_pennies}}`);
+       // console.log(`{${ticket.from}->${ticket.to} : ${response[0].price_pennies}}`);
         // populate the local ticket object with the return data
         ticket.pennyPrice = response[0].price_pennies;
         ticket.duration = response[0].durationSeconds;
