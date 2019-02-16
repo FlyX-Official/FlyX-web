@@ -1,7 +1,7 @@
 WeFly (name pending)
 ===
 
-### Check out our project task tracker: https://github.com/We-Fly/wefly/projects/1
+### Check out our project task tracker: https://github.com/We-Fly/flightsniffer-web/projects/1
 
 ## Running the dev servers
 1. Clone the repo or sync your branch with master, if you already have it cloned and have a branch.
@@ -19,7 +19,7 @@ If you're doing first time setup/get an error, do `npm install -g nodemon` and t
 ### Start Front-End Vue dev server
 cd into client directory and do `npm run serve`
 
-If you're doing first time setup/get an error, do `npm install` before doing `npm run dev`
+If you're doing first time setup/get an error, do `npm install` before doing `npm run serve`
 
 ---
 Once you have done this you can go to `localhost:8080` to see the site. 
