@@ -6,17 +6,15 @@
     <form class="search-form" @submit.prevent="send()">
       
       <autocomplete 
-      :show="6"
       v-model="searchData.from"
-      :id="fromInput"
+      id="from-input"
       placeholder="From"
       >
       </autocomplete>
       
       <autocomplete 
-      :show="6"
       v-model="searchData.to"
-      :id="toInput"
+      id="to-input"
       placeholder="To"
       >
       </autocomplete>
@@ -90,9 +88,7 @@
             contentStyle: {
               opacity: 0.3,
           }
-        },
-        fromInput : 'from-input',
-        toInput : 'to-input'
+        }
       }
     },
     methods: {

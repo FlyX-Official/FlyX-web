@@ -56,8 +56,8 @@ app.post('/search', (req, res) => {
   duration++;
 
   // Extract source and destination airports
-  var sourceAirport = req.body.from;
-  var destAirport = req.body.to;
+  var sourceAirport = grabAirportCode(req.body.from);
+  var destAirport = grabAirportCode(req.body.to);
 
   // Extract source and destination radius
   var radiusSource = req.body.radiusTo;
@@ -278,7 +278,7 @@ function getAirportGeohash(airportCode) {
       body: body
     })
     .then(results => {
-      let geoHash = results.hits.hits[0]._source.location1;
+      let geoHash = results.hits.hits[0]._source.location;
       return geoHash;
     })
     .catch(err => {
@@ -400,6 +400,15 @@ function getSkiplagged(sourceAirport, destAirport, sourceGeohash, destGeohash, y
   }
   // return array of ticket promises
   return ticketArray;
+}
+
+// Function to grab the airport code from autocomplete suggestion
+// Parameters: A string in the format of 'Los Angeles - LAX'
+// Returns: An airport code. eg 'LAX'
+function grabAirportCode(inputString) {
+  let parts = inputString.split(" ");
+  let code = parts[parts.length-1];
+  return code;
 }
 
 // function to concatinate a zero to a number if is below 10,
