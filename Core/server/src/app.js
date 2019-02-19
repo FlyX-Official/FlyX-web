@@ -8,7 +8,7 @@ const elasticsearch = require('elasticsearch');
 // Date parsing node module
 const moment = require('moment');
 //skiplagged node module
-const flightScanner = require('skiplagged-node-api');
+const flightScanner = require('skiplagged-api-wrapper');
 
 // Init App
 const app = express();
@@ -56,8 +56,8 @@ app.post('/search', (req, res) => {
   duration++;
 
   // Extract source and destination airports
-  var sourceAirport = req.body.from;
-  var destAirport = req.body.to;
+  var sourceAirport = grabAirportCode(req.body.from);
+  var destAirport = grabAirportCode(req.body.to);
 
   // Extract source and destination radius
   var radiusSource = req.body.radiusTo;
@@ -83,14 +83,14 @@ app.post('/search', (req, res) => {
     let airportsInDestRadius = getAirportsInRadius(radiusDest, airportGeohashes[1]);
     airportsInRadius.push(airportsInSourceRadius);
     airportsInRadius.push(airportsInDestRadius);
-
     // Once the elasticsearch promises have resolved...
     Promise.all(airportsInRadius).then(airportsInRadius => {
 
       // Do radius search - radiusSearch calls functions matchAirports() and getSkiplagged()
       // Returns an array of tickets (promises)
-      var ticketArray = radiusSearch(airportsInRadius[0], airportsInRadius[1], yearInteger,
-         monthInteger, dayOfMonthInteger, duration);
+      
+       var ticketArray = radiusSearch(airportsInRadius[0], airportsInRadius[1], yearInteger,
+          monthInteger, dayOfMonthInteger, duration);
 
       // Once the skiplagged promises have resolved...
       Promise.all(ticketArray).then(ticketArray => {
@@ -105,10 +105,77 @@ app.post('/search', (req, res) => {
           tickets: filteredTickets
         });
 
-      });
+      }); 
     });
-  });
+  }); 
   
+  /*// Once the elasticsearch promises have resolved...
+  Promise.all(airportGeohashes).then(airportGeohashes => {
+
+    // Get all the airports within X radius of source and dest geohashes from Elasticsearch
+    var airportsInRadius = [];
+    let airportsInSourceRadius = getAirportsInRadius(radiusSource, airportGeohashes[0]);
+    let airportsInDestRadius = getAirportsInRadius(radiusDest, airportGeohashes[1]);
+    airportsInRadius.push(airportsInSourceRadius);
+    airportsInRadius.push(airportsInDestRadius);
+
+    return airportsInRadius;
+
+  }).then(airportsInRadius => {
+    
+     // Do radius search - radiusSearch calls functions matchAirports() and getSkiplagged()
+      // Returns an array of tickets (promises)
+      var ticketArray = radiusSearch(airportsInRadius[0], airportsInRadius[1], yearInteger,
+        monthInteger, dayOfMonthInteger, duration);
+
+      return ticketArray;
+
+  }).then(ticketArray => {
+    
+    // Filters out any tickets that were undefined (the airports did not have any flights between them)
+    var filteredTickets = ticketArray.filter(function (value, index, arr) {
+      return value.pennyPrice > 0;
+    });
+
+    // Send the ticket data to client
+    res.send({
+      tickets: filteredTickets
+    });
+
+  }).catch(err => console.log(err));*/
+  
+});
+
+// autocomplete search endpoint
+app.get('/autocomplete', function (req, res) {
+
+ let body = {
+
+      suggest: {
+          airportNames: {
+              text: req.query['q'],
+              completion: {
+                  field: 'Combined',
+              }
+          }
+      }
+  } 
+
+
+  client.search({
+          index: 'vue-elastic',
+          body: body,
+          // type: 'characters_list'
+      })
+      .then(results => {
+          res.send(results.suggest.airportNames[0].options);
+        //  console.log(results.suggest.airportNames[0].options);
+      })
+      .catch(err => {
+          console.log(err)
+          res.send([]);
+      }); 
+
 });
 
 
@@ -122,7 +189,7 @@ function matchAirports(sourceAirports, destAirports) {
   // create local array to house airport pairs (matchups)
   // Example: [{sourceCode: 'LAX', destCode: 'JFK', sourceGeohash: 'xxxxxxxxx', destGeohash: 'xxxxxxxxx'},{...},{...}]
   var airportCodePairs = [];
-
+  var count = 0;
   // Loop through both airport arrays
   for (var i = 0; i < sourceAirports.length; i++) {
     for (var j = 0; j < destAirports.length; j++) {
@@ -145,6 +212,8 @@ function matchAirports(sourceAirports, destAirports) {
 
       // push local matchup into local array
       airportCodePairs.push(matchup);
+      count++;
+      // console.log(`${count} : {${matchup.sourceCode}->${matchup.destCode}`);
     }
   }
 
@@ -168,6 +237,7 @@ function radiusSearch(sourceAirports, destAirports, year, month, date, duration)
   // Matchup all the airports
   var airportCodePairs = matchAirports(sourceAirports, destAirports);
 
+  
   // For each airport matchup, do a search
   for (var i = 0; i < airportCodePairs.length; i++) {
     // Search for tickets
@@ -178,6 +248,7 @@ function radiusSearch(sourceAirports, destAirports, year, month, date, duration)
 
   // Return the array of tickets
   return ticketArray;
+  
 }
 
 /********************************************************************************
@@ -193,7 +264,7 @@ function getAirportGeohash(airportCode) {
     from: 0,
     query: {
       match: {
-        Combined: {
+        Airport_code: {
           query: airportCode,
           fuzziness: 0
         }
@@ -204,11 +275,10 @@ function getAirportGeohash(airportCode) {
   // perform query into our 'vue-elastic' cluster
   const elasticResults = client.search({
       index: 'vue-elastic',
-      body: body,
-      type: 'characters_list'
+      body: body
     })
     .then(results => {
-      let geoHash = results.hits.hits[0]._source.location1;
+      let geoHash = results.hits.hits[0]._source.location;
       return geoHash;
     })
     .catch(err => {
@@ -248,7 +318,7 @@ function getAirportsInRadius(radius, geoHash) {
   const elasticResults = client.search({
       index: 'upflights',
       body: body,
-      type: ''
+      //type: ''
     })
     .then(results => {
       return results.hits.hits;
@@ -279,7 +349,7 @@ function getSkiplagged(sourceAirport, destAirport, sourceGeohash, destGeohash, y
       from: sourceAirport,
       to: destAirport,
       departureDate: dateMoment.year() + '-' + concatZero(dateMoment.month() + 1) + '-' + concatZero(dateMoment.date()),
-      partialTrips: true,
+      partialTrips: 'true',
       sort: 'cost'
     };
 
@@ -301,8 +371,10 @@ function getSkiplagged(sourceAirport, destAirport, sourceGeohash, destGeohash, y
         destLocation: destGeohash
       }
       
-      // If the ticket is not "undefined" (no ticket available for specified params)
-      if (typeof response[0] !== "undefined") {
+      if (response == 'undefined' || response == 'null' || response == ''){
+        return ticket;
+      }else{
+       // console.log(`{${ticket.from}->${ticket.to} : ${response[0].price_pennies}}`);
         // populate the local ticket object with the return data
         ticket.pennyPrice = response[0].price_pennies;
         ticket.duration = response[0].durationSeconds;
@@ -310,11 +382,14 @@ function getSkiplagged(sourceAirport, destAirport, sourceGeohash, destGeohash, y
         ticket.arrival = response[0].arrivalTime;
         ticket.key = response[0].flight_key;
         ticket.legs = response[0].legs;
-      }
 
-      // return the local ticket object as a promise
-      return ticket;
-    });
+        // return the local ticket object as a promise
+        return ticket;
+      }
+      
+
+      
+    }).catch(err => console.log(err));
 
     // push ticket promise into our ticketArray
     ticketArray.push(ticketPromise);
@@ -325,6 +400,15 @@ function getSkiplagged(sourceAirport, destAirport, sourceGeohash, destGeohash, y
   }
   // return array of ticket promises
   return ticketArray;
+}
+
+// Function to grab the airport code from autocomplete suggestion
+// Parameters: A string in the format of 'Los Angeles - LAX'
+// Returns: An airport code. eg 'LAX'
+function grabAirportCode(inputString) {
+  let parts = inputString.split(" ");
+  let code = parts[parts.length-1];
+  return code;
 }
 
 // function to concatinate a zero to a number if is below 10,
@@ -342,4 +426,4 @@ app.listen(process.env.PORT || 8081, function () {
   console.log('server started');
 })
 
-// app.listen(8081, '10.62.82.171');
+//app.listen(8081, '10.62.102.6');
