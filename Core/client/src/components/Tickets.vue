@@ -20,7 +20,7 @@
     <p id='presearch-message' v-if='dispMessage'>Enter in your trip info to find tickets!</p>
     <div id='search-spinner' v-if='dispSpinner'></div>
     <div v-if="isSortDate && !dispSpinner">
-      <div class="ticket" v-for="ticket in ticketsByDate" :key="ticket.key">
+      <div class="ticket" v-for="(ticket,i) in ticketsByDate" :key="i">
         <div class="ticket-from-to">
           <p>{{ ticket.from }}</p>
           <img src="../assets/Divider.svg">
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div v-else-if="isSortPrice && !dispSpinner">
-      <div class="ticket" v-for="ticket in ticketsByPrice" :key="ticket.key">
+      <div class="ticket" v-for="(ticket,i) in ticketsByPrice" :key="i">
         <div class="ticket-from-to">
           <p>{{ ticket.from }}</p>
           <img src="../assets/Divider.svg">
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div v-else-if="isSortDuration && !dispSpinner">
-      <div class="ticket" v-for="ticket in ticketsByDuration" :key="ticket.key">
+      <div class="ticket" v-for="(ticket,i) in ticketsByDuration" :key="i">
         <div class="ticket-from-to">
           <p>{{ ticket.from }}</p>
           <img src="../assets/Divider.svg">

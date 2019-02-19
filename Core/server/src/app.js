@@ -52,9 +52,8 @@ app.post('/search', (req, res) => {
   var endDateMoment = moment(req.body.date.end);
 
   // Get duration using moment, if difference is 0, input 1 instead, otherwise input difference
-  var duration = (endDateMoment.diff(dateMoment, 'days')) == 0 ? 1 : endDateMoment.diff(dateMoment, 'days');
-  duration++;
-
+  var duration = (endDateMoment.diff(dateMoment, 'days')) == 0 ? 1 : endDateMoment.diff(dateMoment, 'days') + 1;
+  
   // Extract source and destination airports
   var sourceAirport = grabAirportCode(req.body.from);
   var destAirport = grabAirportCode(req.body.to);
