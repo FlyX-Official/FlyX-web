@@ -36,7 +36,7 @@
         mode='range'
         :available-dates='{ start: new Date(), end: new Date(), span: 280 }'
         :disabledAttribute='disabledAttribute'
-        v-model='searchData.date'
+        v-model='searchData.departureWindow'
         show-caps>
       </v-date-picker>
       <v-date-picker
@@ -74,11 +74,16 @@
         // searchData is the object that exists in our nav component 
         // to temporarily store the input form data
         searchData: {
+          oneWay: true,
           from: '',
           to: '',
-          radiusTo: '50',
           radiusFrom: '50',
-          date: {
+          radiusTo: '50',
+          departureWindow : {
+            start: new Date(),
+            end: new Date(),
+          },
+          roundTripDepartureWindow : {
             start: new Date(),
             end: new Date(),
           }

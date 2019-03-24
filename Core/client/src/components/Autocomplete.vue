@@ -10,6 +10,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Api from "@/services/Api";
 
 export default {
@@ -45,7 +46,7 @@ export default {
       Api()
         .get("/autocomplete?q=" + this.query)
         .then(response => {
-          this.results = response.data.map(a => a._source.Combined);
+          this.results = response.data.map(a => a.Combined);
         });
     },
     closeSuggestions: function () {
