@@ -105,9 +105,12 @@
         // do post request
         Api().post('/search', this.searchData)
           .then(response => {
+
+            console.log(response.data);
+
             // This line sends(emits) the ticket data as an event. Other components
             // can listen for this event to have access to the data that is sent.
-            this.$root.$emit('ticketComm', response.data);
+           // this.$root.$emit('ticketComm', response.data);
           })
           .catch(error => {
             // This catches any error the server would send back

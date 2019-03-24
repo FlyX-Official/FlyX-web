@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var ES_functions = require('../functions/ES_functions');
+var elasticsearch = require('../functions/ES_functions');
 var Skypicker_API = require('../functions/skypickerAPI_functions');
 var utility_functions = require('../functions/utility_functions');
+var moment = require('moment');
 
 
 router.post('/', function (req, res, next) {
@@ -14,33 +15,57 @@ router.post('/', function (req, res, next) {
         radiusFrom: req.body.radiusFrom,
         radiusTo: req.body.radiusTo,
         departureWindow: {
-            start: req.body.departureWindow.start,
-            end: req.body.departureWindow.end,
+            start: moment(req.body.departureWindow.start),
+            end: moment(req.body.departureWindow.end),
         },
         roundTripDepartureWindow: {
-            start: req.body.roundTripDepartureWindow.start,
-            end: req.body.roundTripDepartureWindow.end,
+            start: moment(req.body.roundTripDepartureWindow.start),
+            end: moment(req.body.roundTripDepartureWindow.end),
         }
     };
 
-    // console.log(userInput);
+    var departureWindow = {
+        start: {
+            date: userInput.departureWindow.start.date(),
+            month: userInput.departureWindow.start.month(),
+            year: userInput.departureWindow.start.year()
+        },
+        end:{
+            date: userInput.departureWindow.end.date(),
+            month: userInput.departureWindow.end.month(),
+            year: userInput.departureWindow.end.year()
+        }
+    };
 
-    ES_functions.getAirportGeohash(userInput.from).then(fromGeohash => {
-        ES_functions.getAirportGeohash(userInput.to).then(toGeohash => {
-            ES_functions.getAirportsInRadius(userInput.radiusFrom, fromGeohash).then(departureAirports => {
-                ES_functions.getAirportsInRadius(userInput.radiusTo, toGeohash).then(arrivalAirports => {
+    var roundTripDepartureWindow = {
+        start: {
+            date: userInput.roundTripDepartureWindow.start.date(),
+            month: userInput.roundTripDepartureWindow.start.month(),
+            year: userInput.roundTripDepartureWindow.start.year()
+        },
+        end:{
+            date: userInput.roundTripDepartureWindow.end.date(),
+            month: userInput.roundTripDepartureWindow.end.month(),
+            year: userInput.roundTripDepartureWindow.end.year()
+        }
+    };
+
+     console.log(roundTripDepartureWindow);
+
+    elasticsearch.getAirportGeohash(userInput.from).then(fromGeohash => {
+        elasticsearch.getAirportGeohash(userInput.to).then(toGeohash => {
+            elasticsearch.getAirportsInRadius(userInput.radiusFrom, fromGeohash).then(departureAirports => {
+                elasticsearch.getAirportsInRadius(userInput.radiusTo, toGeohash).then(arrivalAirports => {
 
                     let departureAirportCodes = utility_functions.sliceAirportCodes(departureAirports);
                     let arrivalAirportCodes = utility_functions.sliceAirportCodes(arrivalAirports);
 
                     if (userInput.oneWay == true){
-                        console.log(departureAirportCodes);
-                        console.log(arrivalAirportCodes);
-                        Skypicker_API.oneWaySearch(departureAirportCodes,arrivalAirportCodes).then(results => {
+                       Skypicker_API.oneWaySearch(departureAirportCodes, arrivalAirportCodes, departureWindow).then(results => {
                             res.send(results);
                         })
                     }else if (userInput.oneWay == false){
-
+                        
                     }else{
 
                     }
@@ -48,6 +73,7 @@ router.post('/', function (req, res, next) {
             })
         })
     })
+
 });
 
 
