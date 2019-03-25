@@ -35,24 +35,24 @@ export default {
 
     // This block listens for a 'ticketComm' event and then stores the data
     // that was emitted into our local 'tickets' array.
-    this.$root.$on("ticketComm", data => {
+    // this.$root.$on("ticketComm", data => {
 
-      console.clear();
+    //   console.clear();
 
-      this.tickets = [];
-      this.lines = [];
-      this.tickets = data.tickets;
+    //   this.tickets = [];
+    //   this.lines = [];
+    //   this.tickets = data.tickets;
 
-      if(this.deleteLines){
-        this.removeLines(map);
-        this.linesOnMap = 0;
-      }
+    //   if(this.deleteLines){
+    //     this.removeLines(map);
+    //     this.linesOnMap = 0;
+    //   }
 
-      this.decodeGeohashes(Geohash, this.tickets);
-      this.addLines(map, this.lines);
-      this.deleteLines = true;
+    //   this.decodeGeohashes(Geohash, this.tickets);
+    //   this.addLines(map, this.lines);
+    //   this.deleteLines = true;
 
-    });
+    // });
   },
   methods: {
     addLines: function(map, arr) {
