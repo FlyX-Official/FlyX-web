@@ -10,66 +10,62 @@ router.post('/', function (req, res, next) {
 
     var userInput = {
         oneWay: req.body.oneWay,
-        from: utility_functions.sliceAirportCode(req.body.from),
-        to: utility_functions.sliceAirportCode(req.body.to),
+        from: utility_functions.parseAirportInput(req.body.from),
+        to: utility_functions.parseAirportInput(req.body.to),
         radiusFrom: req.body.radiusFrom,
         radiusTo: req.body.radiusTo,
         departureWindow: {
-            start: moment(req.body.departureWindow.start),
-            end: moment(req.body.departureWindow.end),
+            start: {
+                date: moment(req.body.departureWindow.start).date(),
+                month: moment(req.body.departureWindow.start).month(),
+                year: moment(req.body.departureWindow.start).year()
+            },
+            end:{
+                date: moment(req.body.departureWindow.end).date(),
+                month: moment(req.body.departureWindow.end).month(),
+                year: moment(req.body.departureWindow.end).year()
+            }
         },
-        roundTripDepartureWindow: {
-            start: moment(req.body.roundTripDepartureWindow.start),
-            end: moment(req.body.roundTripDepartureWindow.end),
+        returnDepartureWindow: {
+            start: {
+                date: moment(req.body.returnDepartureWindow.start).date(),
+                month: moment(req.body.returnDepartureWindow.start).month(),
+                year: moment(req.body.returnDepartureWindow.start).year()
+            },
+            end:{
+                date: moment(req.body.returnDepartureWindow.end).date(),
+                month: moment(req.body.returnDepartureWindow.end).month(),
+                year: moment(req.body.returnDepartureWindow.end).year()
+            }
         }
     };
 
-    var departureWindow = {
-        start: {
-            date: userInput.departureWindow.start.date(),
-            month: userInput.departureWindow.start.month(),
-            year: userInput.departureWindow.start.year()
-        },
-        end:{
-            date: userInput.departureWindow.end.date(),
-            month: userInput.departureWindow.end.month(),
-            year: userInput.departureWindow.end.year()
-        }
-    };
-
-    var roundTripDepartureWindow = {
-        start: {
-            date: userInput.roundTripDepartureWindow.start.date(),
-            month: userInput.roundTripDepartureWindow.start.month(),
-            year: userInput.roundTripDepartureWindow.start.year()
-        },
-        end:{
-            date: userInput.roundTripDepartureWindow.end.date(),
-            month: userInput.roundTripDepartureWindow.end.month(),
-            year: userInput.roundTripDepartureWindow.end.year()
-        }
-    };
-
-     console.log('FROM: '+req.body.from);
-     console.log('TO: '+req.body.to);
+    console.log(userInput.departureWindow);
+    console.log(userInput.returnDepartureWindow);
 
     elasticsearch.getAirportGeohash(userInput.from).then(fromGeohash => {
         elasticsearch.getAirportGeohash(userInput.to).then(toGeohash => {
             elasticsearch.getAirportsInRadius(userInput.radiusFrom, fromGeohash).then(departureAirports => {
                 elasticsearch.getAirportsInRadius(userInput.radiusTo, toGeohash).then(arrivalAirports => {
 
-                    let departureAirportCodes = utility_functions.sliceAirportCodes(departureAirports);
-                    let arrivalAirportCodes = utility_functions.sliceAirportCodes(arrivalAirports);
+                    let departureAirportCodes = utility_functions.onlyAirportCodes(departureAirports);
+                    let arrivalAirportCodes = utility_functions.onlyAirportCodes(arrivalAirports);
 
                     if (userInput.oneWay == true){
-                       Skypicker_API.oneWaySearch(departureAirportCodes, arrivalAirportCodes, departureWindow).then(results => {
+                       Skypicker_API.oneWaySearch(  departureAirportCodes, arrivalAirportCodes, 
+                                                    userInput.departureWindow)
+                       .then(results => {
                             res.send(results);
                         })
                     }else if (userInput.oneWay == false){
-                        
+                        Skypicker_API.roundTripSearch(  departureAirportCodes, arrivalAirportCodes, 
+                                                        userInput.departureWindow, userInput.returnDepartureWindow)
+                        .then(results => {
+                            res.send(results);
+                        })
                     }else{
 
-                    }
+                    } 
                 })
             })
         })

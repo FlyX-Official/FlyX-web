@@ -26,13 +26,13 @@ module.exports.getUnique = function (arr, comp) {
      return unique;
   }
 
- module.exports.sliceAirportCode = function (inputString) {
+ module.exports.parseAirportInput = function (inputString) {
     let parts = inputString.split(" ");
     let code = parts[parts.length-1];
     return code;
   }
 
- module.exports.sliceAirportCodes = function (arr) {
+ module.exports.onlyAirportCodes = function (arr) {
 
    let airportCodes = []
 

@@ -47,7 +47,7 @@
         mode='range'
         :available-dates='{ start: new Date(), end: new Date(), span: 280 }'
         :disabledAttribute='disabledAttribute'
-        v-model='searchData.date'
+        v-model='searchData.returnDepartureWindow'
         show-caps>
       </v-date-picker>
       <div id="submit-input"><input type="image" src="../assets/submit-btn.svg" alt="" class="submit-button"></div>
@@ -74,7 +74,7 @@
         // searchData is the object that exists in our nav component 
         // to temporarily store the input form data
         searchData: {
-          oneWay: true,
+          oneWay: false,
           from: '',
           to: '',
           radiusFrom: '50',
@@ -83,7 +83,7 @@
             start: new Date(),
             end: new Date(),
           },
-          roundTripDepartureWindow : {
+          returnDepartureWindow : {
             start: new Date(),
             end: new Date(),
           }
