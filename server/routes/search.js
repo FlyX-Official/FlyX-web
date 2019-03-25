@@ -40,13 +40,15 @@ router.post('/', function (req, res, next) {
         }
     };
 
-    console.log(userInput.departureWindow);
-    console.log(userInput.returnDepartureWindow);
-
     elasticsearch.getAirportGeohash(userInput.from).then(fromGeohash => {
         elasticsearch.getAirportGeohash(userInput.to).then(toGeohash => {
             elasticsearch.getAirportsInRadius(userInput.radiusFrom, fromGeohash).then(departureAirports => {
                 elasticsearch.getAirportsInRadius(userInput.radiusTo, toGeohash).then(arrivalAirports => {
+
+                    console.log(userInput.departureWindow);
+                    console.log(userInput.returnDepartureWindow);
+                    console.log(departureAirports);
+                    console.log(arrivalAirports);
 
                     let departureAirportCodes = utility_functions.onlyAirportCodes(departureAirports);
                     let arrivalAirportCodes = utility_functions.onlyAirportCodes(arrivalAirports);
