@@ -50,7 +50,8 @@ router.post('/', function (req, res, next) {
         }
     };
 
-     console.log(userInput);
+     console.log('FROM: '+req.body.from);
+     console.log('TO: '+req.body.to);
 
     elasticsearch.getAirportGeohash(userInput.from).then(fromGeohash => {
         elasticsearch.getAirportGeohash(userInput.to).then(toGeohash => {
