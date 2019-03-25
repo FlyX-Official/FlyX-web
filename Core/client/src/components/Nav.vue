@@ -36,7 +36,7 @@
         mode='range'
         :available-dates='{ start: new Date(), end: new Date(), span: 280 }'
         :disabledAttribute='disabledAttribute'
-        v-model='searchData.date'
+        v-model='searchData.departureWindow'
         show-caps>
       </v-date-picker>
       <v-date-picker
@@ -47,7 +47,7 @@
         mode='range'
         :available-dates='{ start: new Date(), end: new Date(), span: 280 }'
         :disabledAttribute='disabledAttribute'
-        v-model='searchData.date'
+        v-model='searchData.returnDepartureWindow'
         show-caps>
       </v-date-picker>
       <div id="submit-input"><input type="image" src="../assets/submit-btn.svg" alt="" class="submit-button"></div>
@@ -74,11 +74,16 @@
         // searchData is the object that exists in our nav component 
         // to temporarily store the input form data
         searchData: {
+          oneWay: false,
           from: '',
           to: '',
-          radiusTo: '50',
           radiusFrom: '50',
-          date: {
+          radiusTo: '50',
+          departureWindow : {
+            start: new Date(),
+            end: new Date(),
+          },
+          returnDepartureWindow : {
             start: new Date(),
             end: new Date(),
           }
@@ -100,9 +105,12 @@
         // do post request
         Api().post('/search', this.searchData)
           .then(response => {
+
+            console.log(response.data);
+
             // This line sends(emits) the ticket data as an event. Other components
             // can listen for this event to have access to the data that is sent.
-            this.$root.$emit('ticketComm', response.data);
+           // this.$root.$emit('ticketComm', response.data);
           })
           .catch(error => {
             // This catches any error the server would send back
