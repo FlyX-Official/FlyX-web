@@ -39,8 +39,8 @@ router.post('/', function (req, res, next) {
             }
         }
     };
-
-    console.log(userInput);
+    console.log('Raw User Input: '+req.body);
+    console.log('Parsed User Input: '+userInput);
 
     elasticsearch.getAirportGeohash(userInput.from).then(fromGeohash => {
         elasticsearch.getAirportGeohash(userInput.to).then(toGeohash => {
