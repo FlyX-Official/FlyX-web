@@ -50,7 +50,7 @@ router.post('/', function (req, res, next) {
         }
     };
 
-     console.log(roundTripDepartureWindow);
+     console.log(userInput);
 
     elasticsearch.getAirportGeohash(userInput.from).then(fromGeohash => {
         elasticsearch.getAirportGeohash(userInput.to).then(toGeohash => {
