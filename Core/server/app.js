@@ -24,11 +24,5 @@ app.use('/search', searchRouter);
 app.use('/autocomplete', autocompleteRouter);
 app.use('*', notFoundRouter);
 
-/*ES_functions.getAirportGeohash('JFK').then(geohash => {
-    ES_functions.getAirportsInRadius(50,geohash).then(results => {
-        console.log(results);
-    })
-})*/
-
 
 module.exports = app;
