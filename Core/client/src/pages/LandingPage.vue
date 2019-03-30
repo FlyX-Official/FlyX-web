@@ -7,7 +7,7 @@
       <div id="nav-link-wrap">
         <h2>How It Works</h2>
         <h2>Get Started</h2>
-        <h2 @click="signIn()">Sign In</h2>
+        <h2 @click="openSignInModal()">Sign In</h2>
       </div>
     </div>
     <div class="top-grid-container">
@@ -20,80 +20,122 @@
         <img src="../assets/phone_radius_search.svg" alt="not working">
       </div>
       <div class="beta-mid">
-        <div id="beta-btn" @click="register()">
+        <div id="beta-btn" @click="openRegisterModal()">
           <p>Apply For Beta Access</p>
         </div>
       </div>
     </div>
 
-
-    <sweet-modal title="Sign Up" ref="registerModal" overlay-theme="dark">
-      <div class="register-container">
-
-      </div>
-      <template slot="box-action">
-        <a class="alt-option" @click="signIn()">Already Registered?</a>
-      </template>
+    <sweet-modal ref="tabbedModal" overlay-theme="dark">
+      <sweet-modal-tab title="Sign Up" id="tab1">
+        <div class="signIn-register-container">
+          <div class="left">
+            <form id="register-form" @submit.prevent="submitRegister()">
+              <input type="text" v-model="registerData.username" class="signIn-register-input" required placeholder="Username">
+              <input
+                type="email"
+                v-model="registerData.emailAddr"
+                class="signIn-register-input"
+                required
+                placeholder="Email Address"
+              >
+              <input type="password" v-model="registerData.password" class="signIn-register-input" required placeholder="Password">
+              <input
+                type="password"
+                v-model="registerData.confirmPassword"
+                class="signIn-register-input"
+                required
+                placeholder="Re-Type Password"
+              >
+              <button class="signIn-register-submit-btn" type="submit">Register</button>
+            </form>
+          </div>
+          <div class="right">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+          </div>
+        </div>
+      </sweet-modal-tab>
+      <sweet-modal-tab title="Sign In" id="tab2" >
+        <div class="signIn-register-container">
+          <div class="left">
+            <form id="signIn-form" @submit.prevent="submitSignIn()">
+              <input
+                type="email"
+                v-model="signInData.username"
+                class="signIn-register-input"
+                required
+                placeholder="Email Address"
+              >
+              <input type="password" v-model="signInData.password" class="signIn-register-input" required placeholder="Password">
+              <button class="signIn-register-submit-btn" type="submit">Sign In</button>
+            </form>
+          </div>
+          <div class="right">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg" alt="not working">
+          </div>
+        </div>
+      </sweet-modal-tab>
     </sweet-modal>
-
-    <sweet-modal title="Sign In" ref="signInModal" overlay-theme="dark">
-      <div class="signIn-container">
-        
-      </div>
-      <template slot="box-action">
-        <a class="alt-option" @click="register()">Not Registered?</a>
-      </template>
-    </sweet-modal>
-
-
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 
+import Api from "@/services/Api";
+import { SweetModal,SweetModalTab } from "sweet-modal-vue";
 
-  import Api from '@/services/Api'
-  import { SweetModal } from 'sweet-modal-vue'
+export default {
+  components: {
+    SweetModal,
+    SweetModalTab
+  },
+  data() {
+    return {
+      registerData: {
+        username: '',
+        emailAddr: '',
+        password: '',
+        confirmPassword: ''
 
-  export default {
-    components: {
-      SweetModal
-    },
-    data() {
-      return {
+      },
+      signInData: {
+        emailAddr: '',
+        password: '',
       }
+    };
+  },
+  methods: {
+    openRegisterModal: function () {
+      this.$refs.tabbedModal.open('tab1');
     },
-    methods: {
-      // This is the function that sends a post request containing 'searchData' to the server
-      send: function () {
-        
+    openSignInModal: function () {
+      this.$refs.tabbedModal.open('tab2');
+    },
+    submitRegister: function() {
+      // Your firebase code here
 
-        // do post request
-        Api().post('/search', this.searchData)
-          .then(response => {
+      // How to access registration input: 
+      this.registerData.username;
 
-            console.log(response.data.data);
+      alert('Called "submitRegister()" function');
+    },
+    submitSignIn: function() {
+      // Your firebase code here
 
-            // This line sends(emits) the ticket data as an event. Other components
-            // can listen for this event to have access to the data that is sent.
-            this.$root.$emit('ticketComm', response.data.data);
-          })
-          .catch(error => {
-            // This catches any error the server would send back
-            console.log(error);
-          });
-      }, 
-      register: function () {
-        this.$refs.signInModal.close();
-        this.$refs.registerModal.open();
-      },
-      signIn: function () {
-        this.$refs.registerModal.close();
-        this.$refs.signInModal.open();
-      },
+      // How to access sign in input: 
+      this.signInData.username;
+
+      alert('Called "submitSignIn()" function');
     }
   }
+};
 </script>
 
 <style lang="scss">
