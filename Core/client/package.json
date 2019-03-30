@@ -16,6 +16,7 @@
     "moment": "^2.23.0",
     "node-modules": "^1.0.1",
     "randomcolor": "^0.5.3",
+    "sweet-modal-vue": "^2.0.0",
     "v-calendar": "^0.9.7",
     "vue": "^2.5.21",
     "vue-js-modal": "^1.3.26",

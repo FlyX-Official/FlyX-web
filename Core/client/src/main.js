@@ -6,8 +6,10 @@ import App from './App'
 import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
+// import SweetModal from 'sweet-modal-vue/src/plugin.js'
 
-Vue.use(VCalendar)
+Vue.use(VCalendar);
+// Vue.use(SweetModal)
 
 // import Vuetify from 'vuetify'
 // import 'vuetify/dist/vuetify.min.css'

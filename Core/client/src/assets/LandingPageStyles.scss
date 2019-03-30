@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,600,700');
+
+$Fredoka: 'Fredoka One',
+cursive;
+$OpenSans: 'Open Sans',
+sans-serif;
+$Nunito: 'Nunito',
+sans-serif;
+;
+
+$PrimaryBlue: #6487A5;
+$PrimaryGreen: #2ED199;
+$SecondaryBlue: #22B4DE;
+$FontDark: #4A4A4A;
+$FontLight: #FFFFFF;
+
+* {
+    margin: 0px;
+    padding: 0px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    width: 100vw;
+    height: 200vh;
+    font-family: $OpenSans;
+}
+
+#page-container {
+    width: 100%;
+    height: 100%;
+}
+
+.nav {
+    position: fixed;
+    display: grid;
+    width: 100%;
+    height: 100px;
+    background-color: $PrimaryBlue;
+    grid-template-columns: 1fr 450px;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+        "logo navLinkWrap"
+    ;
+    color: $FontLight;
+
+    #logo-wrap {
+        grid-area: logo;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        #logo {
+            font-family: $Fredoka;
+            margin-left: 30px;
+            font-size: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+    }
+
+    #nav-link-wrap {
+        grid-area: navLinkWrap;
+
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding-right: 20px;
+    }
+
+    #nav-link-wrap h2 {
+        font-family: $OpenSans;
+        font-weight: 100;
+        font-size: 25px;
+        padding: 10px;
+        cursor: pointer;
+        user-select: none;
+        
+
+        &:hover {
+            text-decoration: underline;
+            text-decoration-color: $PrimaryGreen;
+        }
+    }
+}
+
+.top-grid-container div {
+  //  border: 1px solid #fff;
+}
+
+.top-grid-container {
+    padding-top: 100px;
+    display: grid;
+    width: 100vw;
+    height: 70vh;
+    background-color: $PrimaryBlue;
+    grid-template-columns: 50px .4fr .6fr 50px;
+    grid-template-rows: 50px 300px 25px 100px 1fr;
+    grid-template-areas:
+        ". . . ."
+        ". leftText rightIMG ."
+        ". . . ."
+        ". beta beta ."
+        ". . . .";
+
+
+    .text-left {
+        grid-area: leftText;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+
+        padding-left: 50px;
+
+        h1 {
+            color: $FontLight;
+            font-family: $Nunito;
+            font-weight: 400;
+            font-size: 3.5vw;
+        }
+    }
+
+    .phone-graphic-right {
+        grid-area: rightIMG;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            width: 45vw;
+        }
+    }
+
+    .beta-mid {
+        grid-area: beta;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        #beta-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 400px;
+            height: 55px;
+            background-color: $PrimaryGreen;
+            border-radius: 40px;
+            cursor: pointer;
+            user-select: none;
+            // box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            box-shadow: 0 20px 15px -6px rgba(0,0,0,0.19);
+
+            &:active{
+                transform: translateY(1px);
+            }
+
+            p{
+                font-family: $OpenSans;
+                color: $FontLight;
+                font-weight: 700;
+                font-size: 25px;
+            }
+        }
+    }
+}
+.alt-option{
+    margin-right: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.register-container{
+    width: 100%;
+    height: 300px;
+}
+.signIn-container{
+    width: 100%;
+    height: 300px;
+}

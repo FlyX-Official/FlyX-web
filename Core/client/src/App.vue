@@ -1,29 +1,33 @@
 <template>
   <div id="app">
+    <LandingPage/>
+
     <!--<router-view/>-->
-    <div class="grid-container">
+    <!--  <div class="grid-container">
       <Nav />
       <Tickets />
       <Map />
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
-import Nav from './components/Nav'
+/* import Nav from './components/Nav'
 import Tickets from './components/Tickets'
-import Map from './components/Map'
+import Map from './components/Map' */
+import LandingPage from "./pages/LandingPage";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Nav, Tickets, Map
+    LandingPage
   }
-}
-
+};
 </script>
 
 <style lang="scss">
-  @import './assets/styles.scss';
-
+#app {
+  width: 100%;
+  height: 100%;
+}
 </style>
