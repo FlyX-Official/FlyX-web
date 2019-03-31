@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,600,700');
+
+$Fredoka: 'Fredoka One', cursive;
+$OpenSans: 'Open Sans', sans-serif;
+$Nunito: 'Nunito', sans-serif;
+
+$PrimaryBlue: #6487A5;
+$PrimaryGreen: #2ED199;
+$SecondaryBlue: #22B4DE;
+$FontDark: #4A4A4A;
+$FontLight: #FFFFFF;
+
+* {
+    margin: 0px;
+    padding: 0px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+#app {
+    width: 100%;
+    height: 100%;
+}
