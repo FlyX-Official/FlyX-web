@@ -2,7 +2,9 @@
   <div id="page-container">
     <div class="nav">
       <div id="logo-wrap">
-        <a href="/"><h1 id="logo">FlyX</h1></a>
+        <a href="/">
+          <h1 id="logo">FlyX</h1>
+        </a>
       </div>
       <div id="nav-link-wrap">
         <h2>How It Works</h2>
@@ -17,7 +19,7 @@
         <h1>One Search.</h1>
       </div>
       <div class="phone-graphic-right">
-        <img src="../assets/phone_radius_search.svg" alt="not working">
+        <img src="@/assets/phone_radius_search.svg" alt="not working">
       </div>
       <div class="beta-mid">
         <div id="beta-btn" @click="openRegisterModal()">
@@ -31,7 +33,13 @@
         <div class="signIn-register-container">
           <div class="left">
             <form id="register-form" @submit.prevent="submitRegister()">
-              <input type="text" v-model="registerData.username" class="signIn-register-input" required placeholder="Username">
+              <input
+                type="text"
+                v-model="registerData.username"
+                class="signIn-register-input"
+                required
+                placeholder="Username"
+              >
               <input
                 type="email"
                 v-model="registerData.emailAddr"
@@ -39,7 +47,13 @@
                 required
                 placeholder="Email Address"
               >
-              <input type="password" v-model="registerData.password" class="signIn-register-input" required placeholder="Password">
+              <input
+                type="password"
+                v-model="registerData.password"
+                class="signIn-register-input"
+                required
+                placeholder="Password"
+              >
               <input
                 type="password"
                 v-model="registerData.confirmPassword"
@@ -51,14 +65,14 @@
             </form>
           </div>
           <div class="right">
-            <img src="../assets/google_sign_in.svg">
-            <img src="../assets/google_sign_in.svg">
-            <img src="../assets/google_sign_in.svg">
-            <img src="../assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
           </div>
         </div>
       </sweet-modal-tab>
-      <sweet-modal-tab title="Sign In" id="tab2" >
+      <sweet-modal-tab title="Sign In" id="tab2">
         <div class="signIn-register-container">
           <div class="left">
             <form id="signIn-form" @submit.prevent="submitSignIn()">
@@ -69,15 +83,21 @@
                 required
                 placeholder="Email Address"
               >
-              <input type="password" v-model="signInData.password" class="signIn-register-input" required placeholder="Password">
+              <input
+                type="password"
+                v-model="signInData.password"
+                class="signIn-register-input"
+                required
+                placeholder="Password"
+              >
               <button class="signIn-register-submit-btn" type="submit">Sign In</button>
             </form>
           </div>
           <div class="right">
-            <img src="../assets/google_sign_in.svg">
-            <img src="../assets/google_sign_in.svg">
-            <img src="../assets/google_sign_in.svg">
-            <img src="../assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
+            <img src="@/assets/google_sign_in.svg">
           </div>
         </div>
       </sweet-modal-tab>
@@ -89,9 +109,10 @@
 /* eslint-disable */
 
 import Api from "@/services/Api";
-import { SweetModal,SweetModalTab } from "sweet-modal-vue";
+import { SweetModal, SweetModalTab } from "sweet-modal-vue";
 
 export default {
+  name: "LandingPage",
   components: {
     SweetModal,
     SweetModalTab
@@ -99,29 +120,28 @@ export default {
   data() {
     return {
       registerData: {
-        username: '',
-        emailAddr: '',
-        password: '',
-        confirmPassword: ''
-
+        username: "",
+        emailAddr: "",
+        password: "",
+        confirmPassword: ""
       },
       signInData: {
-        emailAddr: '',
-        password: '',
+        emailAddr: "",
+        password: ""
       }
     };
   },
   methods: {
-    openRegisterModal: function () {
-      this.$refs.tabbedModal.open('tab1');
+    openRegisterModal: function() {
+      this.$refs.tabbedModal.open("tab1");
     },
-    openSignInModal: function () {
-      this.$refs.tabbedModal.open('tab2');
+    openSignInModal: function() {
+      this.$refs.tabbedModal.open("tab2");
     },
     submitRegister: function() {
       // Your firebase code here
 
-      // How to access registration input: 
+      // How to access registration input:
       this.registerData.username;
 
       alert('Called "submitRegister()" function');
@@ -129,7 +149,7 @@ export default {
     submitSignIn: function() {
       // Your firebase code here
 
-      // How to access sign in input: 
+      // How to access sign in input:
       this.signInData.username;
 
       alert('Called "submitSignIn()" function');
@@ -139,6 +159,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/LandingPageStyles.scss";
+@import "@/assets/LandingPageStyles.scss";
 </style>
 

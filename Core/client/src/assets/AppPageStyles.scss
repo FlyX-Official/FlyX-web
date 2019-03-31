@@ -1,13 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,700,800,900');
-$PrimaryFontColor: #2c3e50;
-*{
-    margin: 0px;
-    padding: 0px;
-    font-family: 'Nunito', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: $PrimaryFontColor;
-}
+@import 'GlobalStyles.scss';
+
 body{
     width: 100vw;
     height: 100vh;
@@ -131,7 +123,7 @@ body{
                 justify-content: center;
                 align-items: center;
                 .submit-button{
-                    background-image: url('./assets/submit-btn.svg');
+                    background-image: url('../assets/submit-btn.svg');
                     background-position: center;
                     background-repeat: no-repeat;
                     width: 75px;
@@ -222,7 +214,7 @@ body{
         }
         #search-spinner{
             position: relative;
-            background-image: url('./assets/spinner.svg');
+            background-image: url('../assets/spinner.svg');
             width: 100px;
             height: 100px;
             top: calc(50% - 80px);
