@@ -2,7 +2,7 @@
   <div id="page-container">
     <div class="nav">
       <div id="logo-wrap">
-        <h1 id="logo">FlyX</h1>
+        <a href="/"><h1 id="logo">FlyX</h1></a>
       </div>
       <div id="nav-link-wrap">
         <h2>How It Works</h2>
@@ -51,10 +51,10 @@
             </form>
           </div>
           <div class="right">
-            <img src="../assets/google_sign_in.svg" alt="not working">
-            <img src="../assets/google_sign_in.svg" alt="not working">
-            <img src="../assets/google_sign_in.svg" alt="not working">
-            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg">
+            <img src="../assets/google_sign_in.svg">
+            <img src="../assets/google_sign_in.svg">
+            <img src="../assets/google_sign_in.svg">
           </div>
         </div>
       </sweet-modal-tab>
@@ -74,10 +74,10 @@
             </form>
           </div>
           <div class="right">
-            <img src="../assets/google_sign_in.svg" alt="not working">
-            <img src="../assets/google_sign_in.svg" alt="not working">
-            <img src="../assets/google_sign_in.svg" alt="not working">
-            <img src="../assets/google_sign_in.svg" alt="not working">
+            <img src="../assets/google_sign_in.svg">
+            <img src="../assets/google_sign_in.svg">
+            <img src="../assets/google_sign_in.svg">
+            <img src="../assets/google_sign_in.svg">
           </div>
         </div>
       </sweet-modal-tab>

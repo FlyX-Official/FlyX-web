@@ -53,12 +53,19 @@ body {
         justify-content: flex-start;
         align-items: center;
 
+        a{
+            text-decoration: none;
+            color: $FontLight;
+        }
+
         #logo {
             font-family: $Fredoka;
             margin-left: 30px;
             font-size: 50px;
             cursor: pointer;
             user-select: none;
+            color: $FontLight;
+            
         }
     }
 
@@ -261,4 +268,7 @@ body {
 .sweet-modal.is-alert .sweet-content {
     padding-top: 32px;
     padding-bottom: 64px;
+}
+.sweet-modal-tab-title{
+    font-size: 20px;
 }
