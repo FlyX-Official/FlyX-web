@@ -47,13 +47,11 @@ router.post('/', function (req, res, next) {
             elasticsearch.getAirportsInRadius(userInput.radiusFrom, fromGeohash).then(departureAirports => {
                 elasticsearch.getAirportsInRadius(userInput.radiusTo, toGeohash).then(arrivalAirports => {
 
-                    console.log(departureAirports);
-
                     let departureAirportCodes = utility_functions.onlyAirportCodes(departureAirports);
                     let arrivalAirportCodes = utility_functions.onlyAirportCodes(arrivalAirports);
 
-                   /* console.log(departureAirportCodes);
-                    console.log(arrivalAirportCodes);*/
+                    console.log(departureAirportCodes);
+                    console.log(arrivalAirportCodes);
 
                     if (userInput.oneWay == true){
                        Skypicker_API.oneWaySearch(  departureAirportCodes, arrivalAirportCodes, 

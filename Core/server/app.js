@@ -28,7 +28,7 @@ app.use('*', notFoundRouter);
 
 
 module.exports = app;
-
+/*
 
 // SESSION CODE_____
 
@@ -91,3 +91,4 @@ app.post('/register', (req, res) =>{
 })
 
   // END SESSION CODE
+*/
