@@ -1,14 +1,9 @@
 @import 'GlobalStyles.scss';
 
-body {
-    width: 100vw;
-    height: 200vh;
-    font-family: $OpenSans;
-}
-
 #page-container {
     width: 100%;
-    height: 100%;
+    height: 200vh;
+    background-color: #F2F2F2;
 }
 
 .nav {
@@ -23,6 +18,7 @@ body {
         "logo navLinkWrap"
     ;
     color: $FontLight;
+    z-index: 5;
 
     #logo-wrap {
         grid-area: logo;
@@ -30,7 +26,7 @@ body {
         justify-content: flex-start;
         align-items: center;
 
-        a{
+        a {
             text-decoration: none;
             color: $FontLight;
         }
@@ -42,8 +38,13 @@ body {
             cursor: pointer;
             user-select: none;
             color: $FontLight;
-            
+
         }
+      /*  a img{
+            height: 60px;
+            margin-left: 15px;
+        }
+        */
     }
 
     #nav-link-wrap {
@@ -74,17 +75,18 @@ body {
 .top-grid-container {
     padding-top: 100px;
     display: grid;
-    width: 100vw;
-    height: 70vh;
+    width: 100%;
+    height: 75vh;
     background-color: $PrimaryBlue;
     grid-template-columns: 50px .4fr .6fr 50px;
-    grid-template-rows: 50px 300px 25px 100px 1fr;
+    grid-template-rows: 25px 300px 25px 120px 1fr 150px;
     grid-template-areas:
         ". . . ."
         ". leftText rightIMG ."
         ". . . ."
         ". beta beta ."
-        ". . . .";
+        ". . . ."
+        "wave wave wave wave";
 
 
     .text-left {
@@ -133,7 +135,6 @@ body {
             border-radius: 40px;
             cursor: pointer;
             user-select: none;
-            // box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
             box-shadow: 0 20px 15px -6px rgba(0, 0, 0, 0.19);
 
             &:active {
@@ -148,6 +149,58 @@ body {
             }
         }
     }
+
+    .wave-container {
+        grid-area: wave;
+        background-color: #F2F2F2;
+        user-select: none;
+        img{
+            transform: translateY(-5px);
+            width: 100%;
+        }
+    }
+}
+
+.ticker-grid-container{
+    width: 100%;
+    height: 85vh;
+    display: grid;
+    grid-template-columns: 1fr 375px 375px 375px 1fr;
+    grid-template-rows: 500px 1fr;
+    grid-template-areas: 
+        ". ticker1 ticker2 ticker3. "
+        "tickerInfo tickerInfo tickerInfo tickerInfo tickerInfo";
+
+        .ticker-wrap{
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .ticker{
+            z-index: 2;
+            transform: translateY(-15px);
+        }
+        #ticker1-wrap{
+            grid-area: ticker1;
+        }
+        #ticker2-wrap{
+            grid-area: ticker2;
+        }
+        #ticker3-wrap{
+            grid-area: ticker3;
+        }
+        #ticker-info-wrap{
+            grid-area: tickerInfo;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            h1{
+                font-family: $Nunito;
+                font-size: 40px;
+            }
+        }
+
 }
 
 .alt-option {
@@ -226,7 +279,7 @@ body {
         align-items: center;
         flex-direction: column;
 
-        img{
+        img {
             width: 90%;
             cursor: pointer;
         }
@@ -238,10 +291,12 @@ body {
     background-color: #f7f7f7;
 
 }
+
 .sweet-modal.is-alert .sweet-content {
     padding-top: 32px;
     padding-bottom: 64px;
 }
-.sweet-modal-tab-title{
+
+.sweet-modal-tab-title {
     font-size: 20px;
 }
