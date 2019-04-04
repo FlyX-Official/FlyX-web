@@ -1,4 +1,4 @@
-FlyX
+FlyX.io
 ===
 
 ## Running the dev servers
