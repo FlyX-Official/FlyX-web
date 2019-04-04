@@ -19,3 +19,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+Core/client/src/firebase/firebaseConfig.js

@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bulma": "^0.7.2",
+    "firebase": "^5.9.2",
     "latlon-geohash": "^1.1.0",
     "mapbox-gl": "^0.51.0",
     "material-design-icons-iconfont": "^4.0.2",

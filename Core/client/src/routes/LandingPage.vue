@@ -42,7 +42,7 @@
               >
               <input
                 type="email"
-                v-model="registerData.emailAddr"
+                v-model="registerData.email"
                 class="signIn-register-input"
                 required
                 placeholder="Email Address"
@@ -78,7 +78,7 @@
             <form id="signIn-form" @submit.prevent="submitSignIn()">
               <input
                 type="email"
-                v-model="signInData.username"
+                v-model="signInData.email"
                 class="signIn-register-input"
                 required
                 placeholder="Email Address"
@@ -110,6 +110,8 @@
 
 import Api from "@/services/Api";
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
+import router from "@/router/index";
+import firebase, { functions } from "firebase";
 
 export default {
   name: "LandingPage",
@@ -121,12 +123,12 @@ export default {
     return {
       registerData: {
         username: "",
-        emailAddr: "",
+        email: "",
         password: "",
         confirmPassword: ""
       },
       signInData: {
-        emailAddr: "",
+        email: "",
         password: ""
       }
     };
@@ -140,19 +142,38 @@ export default {
     },
     submitRegister: function() {
       // Your firebase code here
+      console.log(this.registerData)
+      firebase.auth().createUserWithEmailAndPassword(this.registerData.email, this.registerData.password).then(
+        user => {
+          //console.log(user);
+          alert(`Account created for ${user.email}`);
+          router.push("/app");
+        }
+      ).catch(function(error) {
+        // Error Handling
+        var ErrorCode = error.code;
+        var ErrorMessage = error.message;
+        alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
+      });
 
-      // How to access registration input:
-      this.registerData.username;
-
-      alert('Called "submitRegister()" function');
+      //alert('Called "submitRegister()" function');
     },
     submitSignIn: function() {
       // Your firebase code here
+    firebase.auth().signInWithEmailAndPassword(this.signInData.email, this.signInData.password).then(
+      user => {
+        console.log(user);
+        alert(`${user.email} signed in!`);
+        router.push("/app");
+      }
+    ).catch(function(error) {
+      // Error Handling
+      var ErrorCode = error.code;
+      var ErrorMessage = ErrorMessage;
+      alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
+    });
 
-      // How to access sign in input:
-      this.signInData.username;
-
-      alert('Called "submitSignIn()" function');
+      //alert('Called "submitSignIn()" function');
     }
   }
 };

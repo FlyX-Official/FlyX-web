@@ -6,6 +6,7 @@ import router from '@/router/index'
 import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import '@/firebase/'
 
 Vue.use(VCalendar);
 Vue.use(router);
