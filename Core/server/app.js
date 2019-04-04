@@ -2,13 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const moment = require('moment');
 
 // routes
 var indexRouter = require('./routes/index');
 var searchRouter = require('./routes/search');
 var notFoundRouter = require('./routes/notFound');
 var autocompleteRouter = require('./routes/autocomplete');
+var priceTickerRouter = require('./routes/priceTicker');
 var authentication = require('./routes/authentication');
 
 var app = express();
@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/search', searchRouter);
 app.use('/autocomplete', autocompleteRouter);
+app.use('/priceticker', priceTickerRouter);
 app.use('/authentication', authentication);
 app.use('*', notFoundRouter);
 

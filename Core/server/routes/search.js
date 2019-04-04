@@ -5,6 +5,7 @@ var Skypicker_API = require('../functions/skypickerAPI_functions');
 var utility_functions = require('../functions/utility_functions');
 var moment = require('moment');
 
+const TICKET_LIMIT = 10;
 
 router.post('/', function (req, res, next) {
 
@@ -39,8 +40,6 @@ router.post('/', function (req, res, next) {
             }
         }
     };
-    console.log('Raw User Input: '+req.body);
-    console.log('Parsed User Input: '+userInput);
 
     elasticsearch.getAirportGeohash(userInput.from).then(fromGeohash => {
         elasticsearch.getAirportGeohash(userInput.to).then(toGeohash => {
@@ -55,13 +54,14 @@ router.post('/', function (req, res, next) {
 
                     if (userInput.oneWay == true){
                        Skypicker_API.oneWaySearch(  departureAirportCodes, arrivalAirportCodes, 
-                                                    userInput.departureWindow)
+                                                    userInput.departureWindow, TICKET_LIMIT)
                        .then(results => {
                             res.send(results);
                         })
                     }else if (userInput.oneWay == false){
                         Skypicker_API.roundTripSearch(  departureAirportCodes, arrivalAirportCodes, 
-                                                        userInput.departureWindow, userInput.returnDepartureWindow)
+                                                        userInput.departureWindow, userInput.returnDepartureWindow, 
+                                                        TICKET_LIMIT)
                         .then(results => {
                             res.send(results);
                         })
