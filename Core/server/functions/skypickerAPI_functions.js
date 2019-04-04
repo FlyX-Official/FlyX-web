@@ -1,9 +1,7 @@
 const skypicker = require('skypicker');
 const utility_functions = require('../functions/utility_functions');
 
-const REPONSE_TICKET_LIMIT = 10;
-
-module.exports.oneWaySearch = async function (departureAirportCodes, arrivalAirportCodes, departureWindow){
+module.exports.oneWaySearch = async function (departureAirportCodes, arrivalAirportCodes, departureWindow, ticketLimit){
     try{
         const results = await skypicker.searchFlights({
             departureIdentifier: departureAirportCodes.toString(),
@@ -23,7 +21,7 @@ module.exports.oneWaySearch = async function (departureAirportCodes, arrivalAirp
             partner: 'picky',
             currencyCode: 'USD',
             directFlightsOnly : false,
-            limit: REPONSE_TICKET_LIMIT,
+            limit: ticketLimit,
         })
         return results;
     } catch(error){
@@ -31,7 +29,7 @@ module.exports.oneWaySearch = async function (departureAirportCodes, arrivalAirp
     }
 }
 
-module.exports.roundTripSearch = async function (departureAirportCodes, arrivalAirportCodes, departureWindow, returnDepartureWindow){
+module.exports.roundTripSearch = async function (departureAirportCodes, arrivalAirportCodes, departureWindow, returnDepartureWindow, ticketLimit){
   try{
       const results = await skypicker.searchFlights({
           departureIdentifier: departureAirportCodes.toString(),
@@ -59,7 +57,7 @@ module.exports.roundTripSearch = async function (departureAirportCodes, arrivalA
           partner: 'picky',
           currencyCode: 'USD',
           directFlightsOnly : false,
-          limit: REPONSE_TICKET_LIMIT,
+          limit: ticketLimit,
       })
       return results;
   } catch(error){

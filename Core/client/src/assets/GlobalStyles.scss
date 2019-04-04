@@ -18,7 +18,11 @@ $FontLight: #FFFFFF;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+body {
+    font-family: $OpenSans;
+    background-color: #F2F2F2;
+    color: $FontDark;
+}
 #app {
-    width: 100%;
-    height: 100%;
+    overflow: hidden;
 }

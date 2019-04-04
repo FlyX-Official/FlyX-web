@@ -3,7 +3,8 @@
     <div class="nav">
       <div id="logo-wrap">
         <a href="/">
-          <h1 id="logo">FlyX</h1>
+        <h1 id="logo">FlyX</h1>
+        <!-- <img src="@/assets/logo-hexagon.svg" alt=""> -->
         </a>
       </div>
       <div id="nav-link-wrap">
@@ -25,6 +26,17 @@
         <div id="beta-btn" @click="openRegisterModal()">
           <p>Apply For Beta Access</p>
         </div>
+      </div>
+      <div class="wave-container">
+        <img src="@/assets/wave.svg" alt>
+      </div>
+    </div>
+    <div class="ticker-grid-container">
+      <div id="ticker1-wrap" class="ticker-wrap"><PriceTicker id="ticker1" from="LAX" to="JFK"></PriceTicker></div>
+      <div id="ticker2-wrap" class="ticker-wrap"><PriceTicker id="ticker2" from="LGA" to="ORD"></PriceTicker></div>
+      <div id="ticker3-wrap" class="ticker-wrap"><PriceTicker id="ticker3" from="SFO" to="LAX"></PriceTicker></div>
+      <div id="ticker-info-wrap">
+        <h1>This is a title</h1>
       </div>
     </div>
 
@@ -109,6 +121,7 @@
 /* eslint-disable */
 
 import Api from "@/services/Api";
+import PriceTicker from "@/components/PriceTicker";
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
 import router from "@/router/index";
 import firebase, { functions } from "firebase";
@@ -117,7 +130,8 @@ export default {
   name: "LandingPage",
   components: {
     SweetModal,
-    SweetModalTab
+    SweetModalTab,
+    PriceTicker
   },
   data() {
     return {
