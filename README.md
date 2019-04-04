@@ -1,7 +1,5 @@
-WeFly (name pending)
+FlyX
 ===
-
-### Check out our project task tracker: https://github.com/We-Fly/flightsniffer-web/projects/1
 
 ## Running the dev servers
 1. Clone the repo or sync your branch with master, if you already have it cloned and have a branch.
@@ -12,7 +10,7 @@ WeFly (name pending)
 
 ---
 ### Start Back-End Express server
-cd into server/src directory and do `nodemon app` 
+cd into server/src directory and do `nodemon start` or `node start`
 
 If you're doing first time setup/get an error, do `npm install -g nodemon` and then `npm install` before doing `nodemon app`
 
@@ -23,9 +21,6 @@ If you're doing first time setup/get an error, do `npm install` before doing `np
 
 ---
 Once you have done this you can go to `localhost:8080` to see the site. 
-
-#### DISCLAIMER:
-Searching across many days may cause an error from your web browser. This is because each added day to search across greatly increases the complexity of the algorithm, and the amount of API requests we must do. For sake of testing, please limit yourself to less than a week.
 
 ## Play around with it!
 
