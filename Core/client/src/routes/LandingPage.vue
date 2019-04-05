@@ -3,8 +3,8 @@
     <div class="nav">
       <div id="logo-wrap">
         <a href="/">
-        <h1 id="logo">FlyX</h1>
-        <!-- <img src="@/assets/logo-hexagon.svg" alt=""> -->
+          <h1 id="logo">FlyX</h1>
+          <!-- <img src="@/assets/logo-hexagon.svg" alt=""> -->
         </a>
       </div>
       <div id="nav-link-wrap">
@@ -32,9 +32,15 @@
       </div>
     </div>
     <div class="ticker-grid-container">
-      <div id="ticker1-wrap" class="ticker-wrap"><PriceTicker id="ticker1" from="LAX" to="JFK"></PriceTicker></div>
-      <div id="ticker2-wrap" class="ticker-wrap"><PriceTicker id="ticker2" from="LGA" to="ORD"></PriceTicker></div>
-      <div id="ticker3-wrap" class="ticker-wrap"><PriceTicker id="ticker3" from="SFO" to="LAX"></PriceTicker></div>
+      <div id="ticker1-wrap" class="ticker-wrap">
+        <PriceTicker id="ticker1" from="LAX" to="JFK"></PriceTicker>
+      </div>
+      <div id="ticker2-wrap" class="ticker-wrap">
+        <PriceTicker id="ticker2" from="LGA" to="ORD"></PriceTicker>
+      </div>
+      <div id="ticker3-wrap" class="ticker-wrap">
+        <PriceTicker id="ticker3" from="SFO" to="LAX"></PriceTicker>
+      </div>
       <div id="ticker-info-wrap">
         <h1>This is a title</h1>
       </div>
@@ -156,36 +162,49 @@ export default {
     },
     submitRegister: function() {
       // Your firebase code here
-      console.log(this.registerData)
-      firebase.auth().createUserWithEmailAndPassword(this.registerData.email, this.registerData.password).then(
-        user => {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(
+          this.registerData.email,
+          this.registerData.password
+        )
+        .then(user => {
           //console.log(user);
-          alert(`Account created for ${user.email}`);
           router.push("/app");
-        }
-      ).catch(function(error) {
-        // Error Handling
-        var ErrorCode = error.code;
-        var ErrorMessage = error.message;
-        alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
-      });
+          console.log(user.user);
+          alert(`Account created for: ${user.user.email}`);
+        })
+        .catch(error => {
+          // Error Handling
+          alert(`Error! Check console`);
+          console.log(error);
+        });
 
       //alert('Called "submitRegister()" function');
     },
     submitSignIn: function() {
       // Your firebase code here
-    firebase.auth().signInWithEmailAndPassword(this.signInData.email, this.signInData.password).then(
-      user => {
-        console.log(user);
-        alert(`${user.email} signed in!`);
-        router.push("/app");
-      }
-    ).catch(function(error) {
-      // Error Handling
-      var ErrorCode = error.code;
-      var ErrorMessage = ErrorMessage;
-      alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
-    });
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(
+          this.signInData.email,
+          this.signInData.password
+        )
+        .then(user => {
+
+          console.log(user.user);
+          // Call vuex store setter method initUser(), with user email as the argument.
+          // This "pushes" the user email to the global app store
+          this.$store.commit("initUser", user.user.email);
+
+          router.push("/app");
+          console.log(`${user.user.email} has signed in`);
+        })
+        .catch(error => {
+          // Error Handling
+          alert(`Error! Check console`);
+          console.log(error);
+        });
 
       //alert('Called "submitSignIn()" function');
     }

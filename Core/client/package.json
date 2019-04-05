@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bulma": "^0.7.2",
+    "dotenv": "^7.0.0",
     "firebase": "^5.9.2",
     "latlon-geohash": "^1.1.0",
     "mapbox-gl": "^0.51.0",
@@ -22,7 +23,8 @@
     "vue": "^2.5.21",
     "vue-js-modal": "^1.3.26",
     "vue-router": "^3.0.2",
-    "vuetify": "^1.3.5"
+    "vuetify": "^1.3.5",
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
