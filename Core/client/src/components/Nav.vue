@@ -1,8 +1,9 @@
 <template>
   <div class="nav-wrap">
-   <!-- <div class="logo">
-      <a href="/"><img src="../assets/flightsniffer.svg"></a>
-    </div>-->
+   <div class="logo">
+      <!--<a href="/"><img src="../assets/flightsniffer.svg"></a>-->
+      <p>{{email}}</p>
+    </div>
     <form class="search-form" @submit.prevent="send()">
       
       <autocomplete 
@@ -93,8 +94,14 @@
             contentStyle: {
               opacity: 0.3,
           }
-        }
+        },
+        user: {},
       }
+    },
+    computed: {
+      email () {
+        return this.$store.state.USER.email;
+      },
     },
     methods: {
       // This is the function that sends a post request containing 'searchData' to the server

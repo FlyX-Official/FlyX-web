@@ -18,6 +18,13 @@ export default {
     Nav,
     Tickets,
     Map
+  },
+  data() {
+    return {
+      
+    }
+  },
+  mounted() {
   }
 };
 </script>
