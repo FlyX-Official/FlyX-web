@@ -179,7 +179,7 @@
 
         .ticker{
             z-index: 2;
-            transform: translateY(-15px);
+            transform: translateY(-35px);
         }
         #ticker1-wrap{
             grid-area: ticker1;
@@ -269,6 +269,13 @@
             box-sizing: border-box;
             cursor: pointer;
             outline: none;
+
+            &:hover{
+                background-color: #2CC995;
+            }
+            &:active{
+                background-color: $PrimaryGreen;
+            }
         }
     }
 
@@ -281,6 +288,7 @@
 
         img {
             width: 90%;
+            margin: 3px;
             cursor: pointer;
         }
     }

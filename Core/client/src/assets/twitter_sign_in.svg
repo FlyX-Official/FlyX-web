@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="187px" height="43px" viewBox="0 0 187 43" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="185" height="40" rx="2"></rect>
+        <filter x="-1.1%" y="-5.0%" width="102.2%" height="112.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.24 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feOffset dx="0" dy="0" in="SourceAlpha" result="shadowOffsetOuter2"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter2" result="shadowBlurOuter2"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.12 0" type="matrix" in="shadowBlurOuter2" result="shadowMatrixOuter2"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="shadowMatrixOuter2"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Google-Button" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-58.000000, -138.000000)">
+            <g id="Group-3" transform="translate(59.000000, 139.000000)">
+                <g id="button">
+                    <g id="button-bg">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                        <use fill="#29A3EF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+                <text id="Sign-in-with-Twitter" font-family="Roboto-Medium, Roboto" font-size="14" font-weight="400" letter-spacing="0.21875" fill="#FFFFFF">
+                    <tspan x="51" y="25">Sign in with Twitter</tspan>
+                </text>
+                <g id="twitter-brands" transform="translate(12.000000, 9.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                    <path d="M24.2246845,5.55864145 C24.2418232,5.8025836 24.2418232,6.04657939 24.2418232,6.29052155 C24.2418232,13.7310791 18.6739479,22.3043478 8.49749218,22.3043478 C5.36231587,22.3043478 2.44989043,21.3807682 0,19.7777121 C0.445449006,19.8299548 0.873706538,19.8473869 1.33629428,19.8473869 C3.92318915,19.8473869 6.30457736,18.9587252 8.20623909,17.4427223 C5.7734874,17.390426 3.7347685,15.7698841 3.03234388,13.5394332 C3.37501318,13.5916759 3.71762976,13.6265401 4.0774378,13.6265401 C4.57425029,13.6265401 5.07111551,13.5568117 5.53365052,13.4348943 C2.99811913,12.9120921 1.09640467,10.6468307 1.09640467,7.9110634 L1.09640467,7.84138863 C1.83305404,8.25959816 2.6897273,8.52097242 3.59765858,8.55578299 C2.10716839,7.54509653 1.13068215,5.8200157 1.13068215,3.86837119 C1.13068215,2.82287416 1.40474377,1.864484 1.88447025,1.02806493 C4.60847503,4.44341601 8.70305157,6.67381324 13.2943879,6.91780904 C13.2087469,6.4995995 13.1573307,6.06401149 13.1573307,5.62836985 C13.1573307,2.5266357 15.6243599,0 18.6909812,0 C20.2842511,0 21.7233251,0.679583796 22.7341415,1.77737713 C23.9847421,1.53343498 25.1839792,1.06292913 26.2462119,0.418209539 C25.8349876,1.72513446 24.9612811,2.8229278 23.8134602,3.51989006 C24.9270564,3.39797262 26.006375,3.08424842 27,2.64866041 C26.2463174,3.76383221 25.3040031,4.75703293 24.2246845,5.55864145 Z" id="Path"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

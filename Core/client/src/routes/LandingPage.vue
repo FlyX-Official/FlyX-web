@@ -83,10 +83,10 @@
             </form>
           </div>
           <div class="right">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('google')" src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('facebook')" src="@/assets/facebook_sign_in.svg">
+            <img @click="submitSignInSocial('twitter')" src="@/assets/twitter_sign_in.svg">
+            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg"> 
           </div>
         </div>
       </sweet-modal-tab>
@@ -112,10 +112,10 @@
             </form>
           </div>
           <div class="right">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('google')" src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('facebook')" src="@/assets/facebook_sign_in.svg">
+            <img @click="submitSignInSocial('twitter')" src="@/assets/twitter_sign_in.svg">
+            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg"> 
           </div>
         </div>
       </sweet-modal-tab>
@@ -129,8 +129,8 @@
 import Api from "@/services/Api";
 import PriceTicker from "@/components/PriceTicker";
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
-import router from "@/router/index";
-import firebase, { functions } from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 export default {
   name: "LandingPage",
@@ -153,6 +153,9 @@ export default {
       }
     };
   },
+  mounted() {
+    
+  },
   methods: {
     openRegisterModal: function() {
       this.$refs.tabbedModal.open("tab1");
@@ -161,52 +164,13 @@ export default {
       this.$refs.tabbedModal.open("tab2");
     },
     submitRegister: function() {
-      // Your firebase code here
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(
-          this.registerData.email,
-          this.registerData.password
-        )
-        .then(user => {
-          //console.log(user);
-          router.push("/app");
-          console.log(user.user);
-          alert(`Account created for: ${user.user.email}`);
-        })
-        .catch(error => {
-          // Error Handling
-          alert(`Error! Check console`);
-          console.log(error);
-        });
-
-      //alert('Called "submitRegister()" function');
+      this.$store.dispatch('register', this.registerData);
     },
     submitSignIn: function() {
-      // Your firebase code here
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(
-          this.signInData.email,
-          this.signInData.password
-        )
-        .then(user => {
-
-          console.log(user.user);
-          // Call vuex store setter method initUser(), with user email as the argument.
-          // This "pushes" the user email to the global app store
-          this.$store.commit("initUser", user.user.email);
-
-          router.push("/app");
-          console.log(`${user.user.email} has signed in`);
-        })
-        .catch(error => {
-          // Error Handling
-          alert(`Error! Check console`);
-          console.log(error);
-        });
-
-      //alert('Called "submitSignIn()" function');
+      this.$store.dispatch('signIn', this.signInData);
+    },
+    submitSignInSocial: function(social) {
+      this.$store.dispatch('signInWithSocial', social);
     }
   }
 };

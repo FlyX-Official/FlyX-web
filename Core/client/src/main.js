@@ -7,6 +7,7 @@ import VCalendar from 'v-calendar'
 import dotenv from 'dotenv'
 import { store } from '../store' 
 import './authentication/firebaseConn'
+
 import 'v-calendar/lib/v-calendar.min.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
