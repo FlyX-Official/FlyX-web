@@ -4,13 +4,16 @@ import Vue from 'vue'
 import App from '@/App'
 import router from '@/router/index'
 import VCalendar from 'v-calendar'
+import dotenv from 'dotenv'
+import { store } from '../store' 
+import './authentication/firebaseConn'
+
 import 'v-calendar/lib/v-calendar.min.css'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import '@/firebase/'
 
+dotenv.config()
 Vue.use(VCalendar);
 Vue.use(router);
-
 
 /*
 ***** Enable production mode *********
@@ -22,6 +25,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

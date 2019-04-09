@@ -27,10 +27,6 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-
-            img{
-                margin-left: 20px;
-            }
         }
         .search-form{
             grid-area: form;
@@ -164,7 +160,7 @@
         overflow-y: scroll;
         overflow-x: hidden;
 
-
+        
         &::-webkit-scrollbar {
             width: 5px;  /* remove scrollbar space */
             background: transparent;  /* optional: just make scrollbar invisible */

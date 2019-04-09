@@ -10,7 +10,7 @@ FlyX.io
 
 ---
 ### Start Back-End Express server
-cd into server/src directory and do `nodemon start` or `node start`
+cd into server directory and do `nodemon start` or `node start`
 
 If you're doing first time setup/get an error, do `npm install -g nodemon` and then `npm install` before doing `nodemon app`
 
@@ -21,23 +21,3 @@ If you're doing first time setup/get an error, do `npm install` before doing `np
 
 ---
 Once you have done this you can go to `localhost:8080` to see the site. 
-
-## Play around with it!
-
----
-## Helpful tutorial Links
-
-### Vue:
-  + https://youtu.be/z6hQqgvGI4Y
-
-### Express:
-  + https://youtu.be/gnsO8-xJ8rs
-
-### Webpack:
-  + https://youtu.be/GU-2T7k9NfI
-
-### NPM:
-  + https://youtu.be/jHDhaSSKmB0
-
-### Git + Github
-  + https://youtu.be/SWYqp7iY_Tc

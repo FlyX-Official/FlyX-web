@@ -3,8 +3,8 @@
     <div class="nav">
       <div id="logo-wrap">
         <a href="/">
-        <h1 id="logo">FlyX</h1>
-        <!-- <img src="@/assets/logo-hexagon.svg" alt=""> -->
+          <h1 id="logo">FlyX</h1>
+          <!-- <img src="@/assets/logo-hexagon.svg" alt=""> -->
         </a>
       </div>
       <div id="nav-link-wrap">
@@ -32,9 +32,15 @@
       </div>
     </div>
     <div class="ticker-grid-container">
-      <div id="ticker1-wrap" class="ticker-wrap"><PriceTicker id="ticker1" from="LAX" to="JFK"></PriceTicker></div>
-      <div id="ticker2-wrap" class="ticker-wrap"><PriceTicker id="ticker2" from="LGA" to="ORD"></PriceTicker></div>
-      <div id="ticker3-wrap" class="ticker-wrap"><PriceTicker id="ticker3" from="SFO" to="LAX"></PriceTicker></div>
+      <div id="ticker1-wrap" class="ticker-wrap">
+        <PriceTicker id="ticker1" from="LAX" to="JFK"></PriceTicker>
+      </div>
+      <div id="ticker2-wrap" class="ticker-wrap">
+        <PriceTicker id="ticker2" from="LGA" to="ORD"></PriceTicker>
+      </div>
+      <div id="ticker3-wrap" class="ticker-wrap">
+        <PriceTicker id="ticker3" from="SFO" to="LAX"></PriceTicker>
+      </div>
       <div id="ticker-info-wrap">
         <h1>This is a title</h1>
       </div>
@@ -77,10 +83,10 @@
             </form>
           </div>
           <div class="right">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('google')" src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('facebook')" src="@/assets/facebook_sign_in.svg">
+            <img @click="submitSignInSocial('twitter')" src="@/assets/twitter_sign_in.svg">
+            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg"> 
           </div>
         </div>
       </sweet-modal-tab>
@@ -106,10 +112,10 @@
             </form>
           </div>
           <div class="right">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
-            <img src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('google')" src="@/assets/google_sign_in.svg">
+            <img @click="submitSignInSocial('facebook')" src="@/assets/facebook_sign_in.svg">
+            <img @click="submitSignInSocial('twitter')" src="@/assets/twitter_sign_in.svg">
+            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg"> 
           </div>
         </div>
       </sweet-modal-tab>
@@ -123,8 +129,8 @@
 import Api from "@/services/Api";
 import PriceTicker from "@/components/PriceTicker";
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
-import router from "@/router/index";
-import firebase, { functions } from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 export default {
   name: "LandingPage",
@@ -147,6 +153,9 @@ export default {
       }
     };
   },
+  mounted() {
+    
+  },
   methods: {
     openRegisterModal: function() {
       this.$refs.tabbedModal.open("tab1");
@@ -157,52 +166,14 @@ export default {
     },
 
     submitRegister: function() {
-      // Your firebase code here
-      console.log(this.registerData)
-      firebase.auth().createUserWithEmailAndPassword(this.registerData.email, this.registerData.password).then(
-        user => {
-          //console.log(user);
-          alert(`Account created for ${user.user.email}`);
-          router.push("/app");
-        }
-      ).catch(function(error) {
-        // Error Handling
-        var ErrorCode = error.code;
-        var ErrorMessage = error.message;
-        alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
-      });
+      this.$store.dispatch('register', this.registerData);
     },
 
     submitSignIn: function() {
-      // Your firebase code here
-    firebase.auth().signInWithEmailAndPassword(this.signInData.email, this.signInData.password).then(
-      user => {
-        //console.log(user);
-        //alert(`${user.user.email} signed in!`);
-        router.push("/app");
-      }
-    ).catch(function(error) {
-      // Error Handling
-      var ErrorCode = error.code;
-      var ErrorMessage = ErrorMessage;
-      alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
-    });
+      this.$store.dispatch('signIn', this.signInData);
     },
-
-    googleSignIn: function() {
-      var provider = firebase.auth.GoogleAuthProvider();
-
-      firebase.auth().signInWithPopup(provider).then(function(result){
-        if (result.credential){
-          var token = result.credential.accessToken;
-        }
-        var user = result.user;
-      }).catch(function(error) {
-        // Error Handling
-      var ErrorCode = error.code;
-      var ErrorMessage = ErrorMessage;
-      alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);        
-      })
+    submitSignInSocial: function(social) {
+      this.$store.dispatch('signInWithSocial', social);
     }
   }
 };
