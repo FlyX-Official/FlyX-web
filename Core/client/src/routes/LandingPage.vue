@@ -151,16 +151,18 @@ export default {
     openRegisterModal: function() {
       this.$refs.tabbedModal.open("tab1");
     },
+
     openSignInModal: function() {
       this.$refs.tabbedModal.open("tab2");
     },
+
     submitRegister: function() {
       // Your firebase code here
       console.log(this.registerData)
       firebase.auth().createUserWithEmailAndPassword(this.registerData.email, this.registerData.password).then(
         user => {
           //console.log(user);
-          alert(`Account created for ${user.email}`);
+          alert(`Account created for ${user.user.email}`);
           router.push("/app");
         }
       ).catch(function(error) {
@@ -169,15 +171,14 @@ export default {
         var ErrorMessage = error.message;
         alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
       });
-
-      //alert('Called "submitRegister()" function');
     },
+
     submitSignIn: function() {
       // Your firebase code here
     firebase.auth().signInWithEmailAndPassword(this.signInData.email, this.signInData.password).then(
       user => {
-        console.log(user);
-        alert(`${user.email} signed in!`);
+        //console.log(user);
+        //alert(`${user.user.email} signed in!`);
         router.push("/app");
       }
     ).catch(function(error) {
@@ -186,8 +187,22 @@ export default {
       var ErrorMessage = ErrorMessage;
       alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);
     });
+    },
 
-      //alert('Called "submitSignIn()" function');
+    googleSignIn: function() {
+      var provider = firebase.auth.GoogleAuthProvider();
+
+      firebase.auth().signInWithPopup(provider).then(function(result){
+        if (result.credential){
+          var token = result.credential.accessToken;
+        }
+        var user = result.user;
+      }).catch(function(error) {
+        // Error Handling
+      var ErrorCode = error.code;
+      var ErrorMessage = ErrorMessage;
+      alert(`Error! Code: ${ErrorCode} Message: ${ErrorMessage}`);        
+      })
     }
   }
 };
