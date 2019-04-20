@@ -127,7 +127,7 @@ export default {
       width: 100%;
       height: 35px;
       border-bottom: 1px solid #d8d8d8;
-      cursor: pointer;
+      cursor: not-allowed;
 
       &:last-child{
         border: none;

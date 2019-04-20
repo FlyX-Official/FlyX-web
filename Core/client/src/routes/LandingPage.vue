@@ -42,7 +42,7 @@
         <PriceTicker id="ticker3" from="SFO" to="LAX"></PriceTicker>
       </div>
       <div id="ticker-info-wrap">
-        <h1>This is a title</h1>
+        <!--<h1>This is a title</h1>-->
       </div>
     </div>
 

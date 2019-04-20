@@ -86,7 +86,7 @@ export default {
       // searchData is the object that exists in our nav component
       // to temporarily store the input form data
       searchData: {
-        oneWay: true,
+        oneWay: false,
         from: "",
         to: "",
         radiusFrom: "50",
