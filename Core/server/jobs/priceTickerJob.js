@@ -11,14 +11,14 @@ const TICKET_LIMIT = 10;
 
 var departureWindow= {
     start: {
-        date: moment('2019-04-20').date(),
-        month: moment('2019-04-20').month(),
-        year: moment('2019-04-20').year()
+        date: moment('2019-05-20').date(),
+        month: moment('2019-05-20').month(),
+        year: moment('2019-05-20').year()
     },
     end:{
-        date: moment('2019-04-20').date(),
-        month: moment('2019-04-20').month(),
-        year: moment('2019-04-20').year()
+        date: moment('2019-05-20').date(),
+        month: moment('2019-05-20').month(),
+        year: moment('2019-05-20').year()
     }
 };
 
