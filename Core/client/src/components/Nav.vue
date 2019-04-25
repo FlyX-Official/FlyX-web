@@ -126,7 +126,6 @@ export default {
 
           // This line sends(emits) the ticket data as an event. Other components
           // can listen for this event to have access to the data that is sent.
-          this.$root.$emit("ticketComm", response.data.data);
         })
         .catch(error => {
           // This catches any error the server would send back

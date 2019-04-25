@@ -102,6 +102,13 @@
                     border-top-right-radius: 5px;
                     border-bottom-right-radius: 5px;
                     cursor: pointer;
+
+                    &:hover{
+                        background-color: #2CC995;
+                    }
+                    &:active{
+                        background-color: $PrimaryGreen;
+                    }
                 }
                 #submit-svg{
                         background: url('../assets/search-solid.svg') no-repeat top left;
@@ -154,11 +161,33 @@
     }
     #app-tickets-wrap{
         grid-area: ticketsWrap;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        text-align: center;
+
+        #presearch-message{
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        #search-spinner{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-image: url('../assets/spinner.svg');
+            width: 100px;
+            height: 100px;
+        }
     }
     #app-ticket-details-wrap{
         grid-area: ticketDetailsWrap;
         background-color: #ffffff;
         border-left: 1px solid $PrimaryBlue;
+        
+        overflow-y: scroll;
+        overflow-x: hidden;
+        text-align: center;
     }
 }
 
@@ -175,3 +204,64 @@
 .sweet-modal-tab-title {
     font-size: 20px;
 }
+
+.ticket{
+    background-color: #ffffff;
+    width: 90%;
+    height: 125px;
+    margin: 20px auto;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 1px 18px -5px rgba(0,0,0,0.3);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+
+    display: grid;
+    grid-template-columns: 20px .5fr 1.75fr 1fr .7fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+    "hoverColor shortRoute fullRoute airlines price";
+
+    div{
+       // border: 1px solid red;
+    }
+
+    &:hover{
+        .ticket-hover-color{
+            background-color: $PrimaryGreen;
+        }
+    }
+
+    .ticket-hover-color{
+        grid-area: hoverColor;
+        border-bottom-left-radius: 20px;
+        border-top-left-radius: 20px;
+        transition: all 0.4s cubic-bezier(.25,.8,.25,1);
+    }
+    .ticket-short-route{
+        grid-area: shortRoute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        p{
+            font-size: 30px;
+            font-weight: 800;
+        }
+    }
+    .ticket-full-route{
+        grid-area: fullRoute;
+    }
+    .ticket-airlines{
+        grid-area: airlines;
+    }
+    .ticket-price{
+        grid-area: price;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        border-bottom-right-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+  
+  }

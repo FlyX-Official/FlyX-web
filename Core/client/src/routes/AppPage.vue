@@ -48,8 +48,28 @@
     </div>
 
     <div id="app-sort-wrap"></div>
-    <div id="app-tickets-wrap"></div>
-    <div id="app-ticket-details-wrap"></div>
+
+    <div id="app-tickets-wrap">
+      <!--<p id='presearch-message' v-if='dispMessage'>Enter in your trip info to find tickets!</p>-->
+      <img id='presearch-message' v-if='dispMessage' src="../assets/logo-light.svg">
+      <div id='search-spinner' v-if='dispSpinner'></div>
+      <ticket v-for="(ticket,i) in ticketsByPrice" @click="setTicketDetails(ticket)" :ticketData="ticket" :key="i"></ticket>
+    </div>
+
+    <div id="app-ticket-details-wrap">
+      <p>{{ticketDetailsData}}</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
 
     <sweet-modal ref="profileModal" overlay-theme="dark" :title="currUserDisplayName">
       <button @click="signOut()">Sign out</button>
@@ -65,6 +85,7 @@ import Map from "@/components/Map"; */
 
 import Api from "@/services/Api";
 import autocomplete from "@/components/Autocomplete";
+import ticket from "@/components/Ticket"
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -74,7 +95,8 @@ export default {
   components: {
     autocomplete,
     SweetModal,
-    SweetModalTab
+    SweetModalTab,
+    ticket
   },
   data() {
     return {
@@ -101,7 +123,15 @@ export default {
           opacity: 0.3
         }
       },
-      testPlaceholder: "test"
+      ticketsByPrice: [],
+      ticketsByDuration: [],
+      ticketsByDate: [],
+      isSortPrice: false,
+      isSortDuration: false,
+      isSortDate: false,
+      dispMessage: true,
+      dispSpinner: false,
+      ticketDetailsData: {},
     };
   },
   computed: {
@@ -134,6 +164,11 @@ export default {
 
     var roundBtn = document.getElementById("round-trip-btn");
     roundBtn.style.fontWeight = 800;
+
+    this.$root.$on("ticketDetails", ticket => {
+      console.log('event recieved');
+      this.ticketDetailsData = ticket;
+    })
   },
   methods: {
     refresh() {
@@ -145,6 +180,11 @@ export default {
     validateInput: function() {
       if (this.searchData.from == "" || this.searchData.to == "") {
         alert("Please fill out all fields");
+      }else{
+        this.ticketsByPrice = [];
+        this.ticketDetailsData = null;
+        this.isLoading(true);
+        this.submitSearch();
       }
     },
     // This is the function that sends a post request containing 'searchData' to the server
@@ -156,6 +196,8 @@ export default {
         .post("/search", this.searchData)
         .then(response => {
           console.log(response.data.data);
+          this.isLoading(false);
+          this.ticketsByPrice = response.data.data;
 
           // This line sends(emits) the ticket data as an event. Other components
           // can listen for this event to have access to the data that is sent.
@@ -187,6 +229,15 @@ export default {
     },
     openProfileModal: function() {
       this.$refs.profileModal.open();
+    },
+    isLoading: function (isSearching){
+      if(isSearching){
+        this.dispMessage = false;
+        this.dispSpinner = true;
+      }else{
+        this.dispMessage = false;
+        this.dispSpinner = false;
+      }
     },
   }
 };
