@@ -78,9 +78,11 @@ export default {
   position: absolute;
   width: 300px;
   margin-top: 5px;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   background-color: #fff;
   border-radius: 10px;
+  z-index: 499;
 }
 
 .autocomplete-result {
@@ -89,7 +91,10 @@ export default {
   align-items: center;
   list-style: none;
   text-align: left;
+  overflow-y: hidden;
+  overflow-x: hidden;
   height: 35px;
+  z-index: 500;
   cursor: pointer;
 
   p{

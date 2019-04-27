@@ -164,12 +164,15 @@ export default {
       this.$refs.tabbedModal.open("tab2");
     },
     submitRegister: function() {
+      this.$refs.tabbedModal.close();
       this.$store.dispatch('register', this.registerData);
     },
     submitSignIn: function() {
+      this.$refs.tabbedModal.close();
       this.$store.dispatch('signIn', this.signInData);
     },
     submitSignInSocial: function(social) {
+      this.$refs.tabbedModal.close();
       this.$store.dispatch('signInWithSocial', social);
     }
   }

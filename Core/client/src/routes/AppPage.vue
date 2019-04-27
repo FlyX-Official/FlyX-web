@@ -106,8 +106,8 @@ export default {
         oneWay: false,
         from: "",
         to: "",
-        radiusFrom: "50",
-        radiusTo: "50",
+        radiusFrom: "100",
+        radiusTo: "100",
         departureWindow: {
           start: new Date(),
           end: new Date()
@@ -152,15 +152,15 @@ export default {
   mounted() {
     // window.location.reload();
     // this.myUser = firebase.auth().currentUser;
-    if (localStorage.getItem("reloaded")) {
-      // The page was just reloaded. Clear the value from local storage
-      // so that it will reload the next time this page is visited.
-      localStorage.removeItem("reloaded");
-    } else {
-      // Set a flag so that we know not to reload the page twice.
-      localStorage.setItem("reloaded", "1");
-      location.reload();
-    }
+    // if (localStorage.getItem("reloaded")) {
+    //   // The page was just reloaded. Clear the value from local storage
+    //   // so that it will reload the next time this page is visited.
+    //   localStorage.removeItem("reloaded");
+    // } else {
+    //   // Set a flag so that we know not to reload the page twice.
+    //   localStorage.setItem("reloaded", "1");
+    //   location.reload();
+    // }
 
     var roundBtn = document.getElementById("round-trip-btn");
     roundBtn.style.fontWeight = 800;
@@ -175,6 +175,7 @@ export default {
       window.location.reload();
     },
     signOut: function() {
+      this.$refs.profileModal.close();
       this.$store.dispatch("signOut");
     },
     validateInput: function() {

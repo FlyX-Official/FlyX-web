@@ -5,7 +5,7 @@ var Skypicker_API = require('../functions/skypickerAPI_functions');
 var utility_functions = require('../functions/utility_functions');
 var moment = require('moment');
 
-const TICKET_LIMIT = 10;
+const TICKET_LIMIT = 100;
 
 router.post('/', function (req, res, next) {
 
