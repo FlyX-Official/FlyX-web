@@ -42,7 +42,7 @@
         <PriceTicker id="ticker3" from="SFO" to="LAX"></PriceTicker>
       </div>
       <div id="ticker-info-wrap">
-        <h1>This is a title</h1>
+        <!--<h1>This is a title</h1>-->
       </div>
     </div>
 
@@ -166,13 +166,16 @@ export default {
     },
 
     submitRegister: function() {
+      this.$refs.tabbedModal.close();
       this.$store.dispatch('register', this.registerData);
     },
 
     submitSignIn: function() {
+      this.$refs.tabbedModal.close();
       this.$store.dispatch('signIn', this.signInData);
     },
     submitSignInSocial: function(social) {
+      this.$refs.tabbedModal.close();
       this.$store.dispatch('signInWithSocial', social);
     }
   }

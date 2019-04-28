@@ -72,7 +72,7 @@ export const store = new Vuex.Store({
                 // The firebase.auth.AuthCredential type that was used.
                 var credential = error.credential;
                 // ...
-                alert(error.message);
+                console.log(error.message);
             });
         },
         signOut() {

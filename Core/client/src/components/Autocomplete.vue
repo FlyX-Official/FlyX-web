@@ -3,7 +3,7 @@
     <input type="text" v-model="query" @input="isOpen=true" @blur="closeSuggestions" @keyup.prevent="autocomplete()" v-bind:placeholder="this.placeholder">
     <ul class="autocomplete-results" v-show="isOpen">
       <li class="autocomplete-result" v-for="(result, i) in results" :key="i" @click="setResult(result)">
-          {{ result }}
+         <p> {{ result }} </p>
       </li>
     </ul>
   </div>
@@ -73,26 +73,37 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .autocomplete-results {
-  padding: 0;
-  margin: 0;
-  margin-top: -5px;
-  overflow: scroll;
+  position: absolute;
+  width: 300px;
+  margin-top: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
   background-color: #fff;
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-radius: 10px;
+  z-index: 499;
 }
 
 .autocomplete-result {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   list-style: none;
   text-align: left;
-  padding: 4px 2px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 35px;
+  z-index: 500;
   cursor: pointer;
+
+  p{
+    margin: 5px;
+  }
 }
 
 .autocomplete-result:hover {
-  background-color: #fd6b6d;
+  background-color: #22B4DE;
   color: white;
 }
 </style>

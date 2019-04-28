@@ -29,7 +29,8 @@ module.exports.oneWaySearch = async function (departureAirportCodes, arrivalAirp
     }
 }
 
-module.exports.roundTripSearch = async function (departureAirportCodes, arrivalAirportCodes, departureWindow, returnDepartureWindow, ticketLimit){
+module.exports.roundTripSearch = async function (departureAirportCodes, arrivalAirportCodes, departureWindow, 
+                                                  returnDepartureWindow, ticketLimit){
   try{
       const results = await skypicker.searchFlights({
           departureIdentifier: departureAirportCodes.toString(),
