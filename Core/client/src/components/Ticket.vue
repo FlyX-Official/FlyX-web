@@ -1,5 +1,5 @@
 <template>
-  <a :href="ticketData.deep_link" target="_blank" @click="clickTicket(ticketData)" class="ticket">
+  <div @click="clickTicket(ticketData)" class="ticket">
     <div class="ticket-hover-color"></div>
     <div class="ticket-short-route">
       <p>{{ticketData.flyFrom}}</p>
@@ -57,7 +57,7 @@
     <div class="ticket-price">
       <h1>${{ticketData.price}}</h1>
     </div>
-  </a>
+  </div>
 </template>
 
 <script>

@@ -51,25 +51,66 @@
 
     <div id="app-tickets-wrap">
       <!--<p id='presearch-message' v-if='dispMessage'>Enter in your trip info to find tickets!</p>-->
-      <img id='presearch-message' v-if='dispMessage' src="../assets/logo-light.svg">
-      <div id='search-spinner' v-if='dispSpinner'></div>
-      <ticket v-for="(ticket,i) in ticketsByPrice" @click="setTicketDetails(ticket)" :ticketData="ticket" :key="i"></ticket>
+      <img id="presearch-message" v-if="dispMessage" src="../assets/logo-light.svg">
+      <div id="search-spinner" v-if="dispSpinner"></div>
+      <ticket
+        v-for="(ticket,i) in ticketsByPrice"
+        @click="setTicketDetails(ticket)"
+        :ticketData="ticket"
+        :key="i"
+      ></ticket>
     </div>
 
     <div id="app-ticket-details-wrap">
-      <p>{{ticketDetailsData}}</p>
+      <div id="details-map-wrap"></div>
+      <div id="details-text-wrap">
+        <div v-if="ticketDetailsData" class="text-inner-wrap">
+          <div v-for="(leg,i) in ticketDetailsData.route" :key="i" class="details-text-leg-wrap">
+            <div class="leg">
+              <div class="leg-date-row leg-row">
+                <p>
+                  {{convertDate(leg.dTimeUTC)}}
+                  <span
+                    v-if="convertDate(leg.dTimeUTC) != convertDate(leg.aTimeUTC)"
+                  >- {{convertDate(leg.aTimeUTC)}}</span>
+                </p>
+              </div>
+              <div class="leg-top leg-row">
+                <img src="../assets/plane-departure.svg" alt>
+                <p class="leg-time">{{converTime(leg.dTimeUTC)}}</p>
+                <p class="leg-airport">{{leg.cityFrom}} - {{leg.flyFrom}}</p>
+              </div>
+              <div class="leg-mid leg-row">
+                <img src="../assets/plane-arrival.svg" alt>
+                <p class="leg-time">{{converTime(leg.aTimeUTC)}}</p>
+                <p class="leg-airport">{{leg.cityTo}} - {{leg.flyTo}}</p>
+              </div>
+              <div class="leg-bot leg-row">
+                <div>
+                  <p>{{convertAirlineCode(leg.airline)}}</p>
+                </div>
+                <div>
+                  <p>Flight #{{leg.flight_no}}</p>
+                </div>
+              </div>
+            </div>
+            <div v-if="ticketDetailsData.route[i+1]" class="layover">
+              <p>{{determineLayoverTime(leg, ticketDetailsData.route[i+1])}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="details-buy-btn-wrap">
+        <a
+          v-if="ticketDetailsData"
+          :href="ticketDetailsData.deep_link"
+          target="_blank"
+          id="buy-btn"
+        >
+          <p>Purchase Ticket</p>
+        </a>
+      </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
 
     <sweet-modal ref="profileModal" overlay-theme="dark" :title="currUserDisplayName">
       <button @click="signOut()">Sign out</button>
@@ -85,10 +126,12 @@ import Map from "@/components/Map"; */
 
 import Api from "@/services/Api";
 import autocomplete from "@/components/Autocomplete";
-import ticket from "@/components/Ticket"
+import ticket from "@/components/Ticket";
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
-import firebase from "firebase/app";
+import firebase, { functions } from "firebase/app";
 import "firebase/auth";
+const moment = require("moment-timezone");
+const airlinesCodes = require("airlines-iata-codes");
 
 export default {
   name: "AppPage",
@@ -131,7 +174,7 @@ export default {
       isSortDate: false,
       dispMessage: true,
       dispSpinner: false,
-      ticketDetailsData: {},
+      ticketDetailsData: ""
     };
   },
   computed: {
@@ -166,9 +209,9 @@ export default {
     roundBtn.style.fontWeight = 800;
 
     this.$root.$on("ticketDetails", ticket => {
-      console.log('event recieved');
+      console.log("event recieved");
       this.ticketDetailsData = ticket;
-    })
+    });
   },
   methods: {
     refresh() {
@@ -181,7 +224,7 @@ export default {
     validateInput: function() {
       if (this.searchData.from == "" || this.searchData.to == "") {
         alert("Please fill out all fields");
-      }else{
+      } else {
         this.ticketsByPrice = [];
         this.ticketDetailsData = null;
         this.isLoading(true);
@@ -214,16 +257,16 @@ export default {
         this.searchData.oneWay = false;
         var roundBtn = document.getElementById("round-trip-btn");
         var onewayBtn = document.getElementById("one-way-btn");
-        var returnDatepicker = document.getElementById('return-datepicker');
-        returnDatepicker.style.display = 'initial';
+        var returnDatepicker = document.getElementById("return-datepicker");
+        returnDatepicker.style.display = "initial";
         roundBtn.style.fontWeight = 800;
         onewayBtn.style.fontWeight = 100;
       } else {
         this.searchData.oneWay = true;
         var roundBtn = document.getElementById("round-trip-btn");
         var onewayBtn = document.getElementById("one-way-btn");
-        var returnDatepicker = document.getElementById('return-datepicker');
-        returnDatepicker.style.display = 'none';
+        var returnDatepicker = document.getElementById("return-datepicker");
+        returnDatepicker.style.display = "none";
         roundBtn.style.fontWeight = 100;
         onewayBtn.style.fontWeight = 800;
       }
@@ -231,15 +274,54 @@ export default {
     openProfileModal: function() {
       this.$refs.profileModal.open();
     },
-    isLoading: function (isSearching){
-      if(isSearching){
+    isLoading: function(isSearching) {
+      if (isSearching) {
         this.dispMessage = false;
         this.dispSpinner = true;
-      }else{
+      } else {
         this.dispMessage = false;
         this.dispSpinner = false;
       }
     },
+    setTicketDetails: function(ticket) {
+      this.ticketDetailsData = ticket;
+    },
+    determineLayoverTime: function(leg1, leg2) {
+      var arrival = moment.unix(leg1.aTime);
+      var departure = moment.unix(leg2.dTime);
+
+      var elapsedTime = departure.diff(arrival);
+      var tempTime = moment.duration(elapsedTime);
+
+      var returnedTime;
+
+      if (tempTime.days() != 0) {
+        returnedTime = tempTime.days() + "d " + tempTime.hours() + "h " + tempTime.minutes() + "m";
+      }
+
+      if (tempTime.hours() == 0 && tempTime.days() == 0) {
+        returnedTime = tempTime.minutes() + "m";
+      }
+
+      returnedTime = tempTime.hours() + "h " + tempTime.minutes() + "m";
+
+      if (leg1.return == 0 && leg2.return == 1){
+        return tempTime.days() + ' Day Stay';
+      }else{
+        return returnedTime + ' Layover';
+      }
+    },
+    convertAirlineCode: function(code) {
+      return airlinesCodes.getAirlineName(code);
+    },
+    converTime: function(timeSeconds) {
+      var timeMoment = moment.unix(timeSeconds);
+      return timeMoment.format("hh:mma");
+    },
+    convertDate: function(rawDate) {
+      var dateMoment = moment.unix(rawDate);
+      return dateMoment.format("ll");
+    }
   }
 };
 </script>

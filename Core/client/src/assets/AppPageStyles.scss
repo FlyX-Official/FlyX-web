@@ -1,375 +1,501 @@
-@import 'GlobalStyles.scss';
+@import "GlobalStyles.scss";
 
-#app-page-container{
-    display: grid;
-    width: 100%;
-    height: 100vh;
-    grid-template-columns: 1.75fr 1fr;
-    grid-template-rows: 100px 110px 1fr;
-    grid-template-areas: 
+#app-page-container {
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  grid-template-columns: 1.75fr 1fr;
+  grid-template-rows: 100px 110px 1fr;
+  grid-template-areas:
     "nav nav"
     "sortWrap ticketDetailsWrap"
     "ticketsWrap ticketDetailsWrap";
 
-    
-    #app-nav{
-        grid-area: nav;
-        background-color: $PrimaryBlue;
+  #app-nav {
+    grid-area: nav;
+    background-color: $PrimaryBlue;
 
-        display: grid;
-        grid-template-columns: 1fr .4fr;
-        grid-template-rows: 1fr;
-        grid-template-areas: 
-        "search profile";
+    display: grid;
+    grid-template-columns: 1fr 0.4fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "search profile";
 
-        #search-bar-wrap{
-          //  border-left: 1px solid white;
-         //   border-right: 1px solid white;
-            grid-area: search;
-            
+    #search-bar-wrap {
+      //  border-left: 1px solid white;
+      //   border-right: 1px solid white;
+      grid-area: search;
+
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+      padding-left: 20px;
+
+      input,
+      button {
+        outline: none;
+      }
+
+      #trip-selection {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        width: 100%;
+
+        p {
+          margin-right: 10px;
+          color: $FontLight;
+          font-size: 18px;
+          font-weight: 100;
+          user-select: none;
+          cursor: pointer;
+        }
+      }
+
+      #app-page-search-form {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 5px;
+
+        #from-input {
+          input {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+          }
+        }
+        .autocomplete {
+          input {
+            width: 185px;
+            height: 40px;
+            margin: 0.5px;
+            border: none;
+            box-sizing: border-box;
+            vertical-align: middle;
+            font-size: 15px;
+            padding-left: 7px;
+          }
+        }
+        .datepicker {
+          input {
+            width: 185px;
+            height: 40px;
+            text-align: center;
+            margin: 0.5px;
+            border: none;
+            box-sizing: border-box;
+            vertical-align: middle;
+            font-size: 12px;
+          }
+        }
+        #nav-search-submit-btn {
+          width: 70px;
+          height: 40px;
+          background-color: $PrimaryGreen;
+          border: none;
+          margin: 0.5px;
+          box-sizing: border-box;
+          border-top-right-radius: 5px;
+          border-bottom-right-radius: 5px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #2cc995;
+          }
+          &:active {
+            background-color: $PrimaryGreen;
+          }
+        }
+        #submit-svg {
+          background: url("../assets/search-solid.svg") no-repeat top left;
+          background-size: contain;
+          display: inline-block;
+          height: 22px;
+          width: 22px;
+        }
+      }
+    }
+    #nav-profile-wrap {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      flex-direction: row;
+      grid-area: profile;
+
+      #nav-username-wrap {
+        color: $FontLight;
+        user-select: none;
+        cursor: pointer;
+        p {
+          font-size: 25px;
+          font-weight: 100;
+        }
+      }
+      #nav-profile-picture {
+        border: 1px solid #fff;
+        background-color: #fff;
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        margin: 0 20px;
+        cursor: pointer;
+
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 100%;
+          object-fit: fill;
+        }
+      }
+    }
+  }
+  #app-sort-wrap {
+    grid-area: sortWrap;
+    background-color: #e4e4e4;
+  }
+  #app-tickets-wrap {
+    grid-area: ticketsWrap;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    text-align: center;
+
+    &::-webkit-scrollbar {
+      width: 5px; /* remove scrollbar space */
+      background: transparent; /* optional: just make scrollbar invisible */
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #9b9b9b;
+      border-radius: 20px;
+    }
+
+    #presearch-message {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    #search-spinner {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-image: url("../assets/spinner.svg");
+      width: 100px;
+      height: 100px;
+    }
+  }
+  #app-ticket-details-wrap {
+    grid-area: ticketDetailsWrap;
+    background-color: #ffffff;
+    border-left: 1px solid $PrimaryBlue;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 70px;
+    grid-template-areas:
+      "textDetails"
+      "buyBtn";
+
+    div {
+    }
+    // #details-map-wrap {
+    //   grid-area: map;
+    // }
+    #details-text-wrap {
+      grid-area: textDetails;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      padding-top: 50px;
+
+      &::-webkit-scrollbar {
+        width: 5px; /* remove scrollbar space */
+        background: transparent; /* optional: just make scrollbar invisible */
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #9b9b9b;
+        border-radius: 20px;
+      }
+
+      .text-inner-wrap {
+        width: 100%;
+
+        .details-text-leg-wrap {
+          width: 100%;
+
+          .leg {
+            width: 80%;
+            margin: 10px auto;
+            border: 1px dashed #9b9b9b;
+            border-radius: 5px;
+            padding: 10px;
+
+            .leg-date-row{
+              margin-bottom: 10px;
+              p{
+                font-weight: 600;
+              }
+            }
+            .leg-row {
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+              flex-direction: row;
+              padding-left: 10px;
+
+              .leg-airport {
+                margin: 0 10px;
+                font-size: 20px;
+                margin: 5px 15px;
+              }
+              .leg-time {
+                color: #8a817c;
+              }
+              img {
+                width: 25px;
+                margin-right: 15px;
+              }
+            }
+            .leg-bot {
+              div {
+                background-color: $SecondaryBlue;
+                margin: 2px;
+                color: $FontLight;
+                overflow: hidden;
+                max-width: 150px;
+                max-height: 22px;
+                border-radius: 20px;
+                p {
+                  padding: 1px 15px;
+                  font-size: 14px;
+                }
+                &:nth-of-type(2){
+                  background-color: $PrimaryGreen;
+                }
+              }
+            }
+          }
+          .layover {
+            width: 200px;
+            height: 30px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            flex-direction: column;
-            padding-left: 20px;
-
-            input, button{
-                outline: none;
-            }
-
-            #trip-selection{
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-                flex-direction: row;
-                width: 100%;
-
-                
-                p{
-                    margin-right: 10px;
-                    color: $FontLight;
-                    font-size: 18px;
-                    font-weight: 100;
-                    user-select: none;
-                    cursor: pointer;
-                }
-            }
-
-            #app-page-search-form{
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-                margin-top: 5px;
-
-                #from-input{
-                    input{
-                        border-top-left-radius: 5px;
-                        border-bottom-left-radius: 5px;
-                    }
-                }
-                .autocomplete{
-                    input{
-                        width: 185px;
-                        height: 40px;
-                        margin: .5px;
-                        border: none;
-                        box-sizing: border-box;
-                        vertical-align: middle;
-                        font-size: 15px;
-                        padding-left: 7px;
-                    }
-                }
-                .datepicker{
-                    input{
-                        width: 185px;
-                        height: 40px;
-                        text-align: center;
-                        margin: .5px;
-                        border: none;
-                        box-sizing: border-box;
-                        vertical-align: middle;
-                        font-size: 12px;
-                    }
-                }
-                #nav-search-submit-btn{
-                    width: 70px;
-                    height: 40px;
-                    background-color: $PrimaryGreen;
-                    border: none;
-                    margin: .5px;
-                    box-sizing: border-box;
-                    border-top-right-radius: 5px;
-                    border-bottom-right-radius: 5px;
-                    cursor: pointer;
-
-                    &:hover{
-                        background-color: #2CC995;
-                    }
-                    &:active{
-                        background-color: $PrimaryGreen;
-                    }
-                }
-                #submit-svg{
-                        background: url('../assets/search-solid.svg') no-repeat top left;
-                        background-size: contain;
-                        display: inline-block;
-                        height: 22px;
-                        width: 22px;
-                }
-            }
-        }
-        #nav-profile-wrap{
-            display: flex;
-            justify-content: flex-end;
             align-items: center;
-            flex-direction: row;
-            grid-area: profile;
+            margin: 0 auto;
+            border-radius: 30px;
+            background-color: $PrimaryBlue;
 
-            #nav-username-wrap{
-                color: $FontLight;
-                user-select: none;
-                cursor: pointer;
-                p{
-                    font-size: 25px;
-                    font-weight: 100;
-
-                }
+            p {
+              color: $FontLight;
+              font-weight: 600;
             }
-            #nav-profile-picture{
-                border: 1px solid #fff;
-                background-color: #fff;
-                width: 50px;
-                height: 50px;
-                border-radius: 100%;
-                margin: 0 20px;
-                cursor: pointer;
-                
+          }
+        }
+      }
+    }
+    #details-buy-btn-wrap {
+      grid-area: buyBtn;
 
-                img{
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 100%;
-                    object-fit: fill;
-                }
-            }
-        }
-    }
-    #app-sort-wrap{
-        grid-area: sortWrap;
-        background-color: #e4e4e4;
-    }
-    #app-tickets-wrap{
-        grid-area: ticketsWrap;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        &::-webkit-scrollbar {
-            width: 5px;  /* remove scrollbar space */
-            background: transparent;  /* optional: just make scrollbar invisible */
+      #buy-btn {
+        text-decoration: none;
+        border: none;
+        width: 60%;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        background-color: $PrimaryGreen;
+        color: $FontLight;
+        // box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        cursor: pointer;
+        p {
+          font-size: 20px;
+          font-weight: 800;
         }
-        &::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, .3);
-            border-radius: 20px;
+        &:hover {
+          background-color: #2cc995;
         }
-
-        #presearch-message{
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
+        &:active {
+          background-color: $PrimaryGreen;
         }
-        #search-spinner{
-            position: relative;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-image: url('../assets/spinner.svg');
-            width: 100px;
-            height: 100px;
-        }
+      
+      }
     }
-    #app-ticket-details-wrap{
-        grid-area: ticketDetailsWrap;
-        background-color: #ffffff;
-        border-left: 1px solid $PrimaryBlue;
-        
-        overflow-y: scroll;
-        overflow-x: hidden;
-        text-align: center;
-    }
+  }
 }
 
 .sweet-modal {
-    background-color: #f7f7f7;
-
+  background-color: #f7f7f7;
 }
 
 .sweet-modal.is-alert .sweet-content {
-    padding-top: 32px;
-    padding-bottom: 64px;
+  padding-top: 32px;
+  padding-bottom: 64px;
 }
 
 .sweet-modal-tab-title {
-    font-size: 20px;
+  font-size: 20px;
 }
 
-.ticket{
-    background-color: #ffffff;
-    width: 90%;
-    height: 140px;
-    margin: 20px auto;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0 1px 18px -5px rgba(0,0,0,0.3);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+.ticket {
+  background-color: #ffffff;
+  width: 90%;
+  height: 140px;
+  margin: 20px auto;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 1px 18px -5px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-    text-decoration: none;
-    color: $FontDark;
+  text-decoration: none;
+  color: $FontDark;
 
-    display: grid;
-    grid-template-columns: 20px .5fr 1px 1.75fr 1fr .7fr;
-    grid-template-rows: 1fr;
-    grid-template-areas: 
-    "hoverColor shortRoute divider fullRoute airlines price";
+  display: grid;
+  grid-template-columns: 20px 0.5fr 1px 1.75fr 1fr 0.7fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "hoverColor shortRoute divider fullRoute airlines price";
 
-    div{
-       // border: 1px solid red;
-    }
-
-    &:hover{
-        .ticket-hover-color{
-            background-color: $PrimaryGreen;
-        }
-    }
-
-    .ticket-hover-color{
-        grid-area: hoverColor;
-        border-bottom-left-radius: 20px;
-        border-top-left-radius: 20px;
-        transition: all 0.4s cubic-bezier(.25,.8,.25,1);
-    }
-    .ticket-short-route{
-        grid-area: shortRoute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        p{
-            font-size: 35px;
-            font-weight: 800;
-        }
-    }
-    .ticket-vertical-divider{
-        grid-area: divider;
-        height: 100%;
-        display:flex;
-        justify-content: center;
-        align-items: center;
-
-        div{
-            height: 80%;
-            border-left: 1px solid $PrimaryBlue;
-        }
-    }
-    .ticket-full-route{
-        grid-area: fullRoute;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        .full-route-arrow{
-           // margin: 0 10px;
-            transform: translateY(-8px);
-        }
-        .full-route-box-divider{
-            width: 90%;
-            display: block;
-            height: 1px;
-            border: 0;
-            border-top: 1px solid $PrimaryBlue;
-            padding: 0;
-            margin: 0;
-        }
-        .full-route-box{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: row;
-            width: 100%;
-            height: 50%;
-
-            // &:nth-of-type(2){
-            //     border-top: 1px solid $PrimaryBlue;
-            // }
-
-            .full-route-departure-wrap, .full-route-arrival-wrap{
-                width: 75px;
-            }
-            .full-route-airport{
-                font-weight: 600;
-                font-size: 25px;
-            }
-            .full-route-short-date{
-                font-weight: 100;
-                font-size: 14px;
-                transform:translateY(-5px);
-            }
-
-            .full-route-stops-duration-wrap{
-                .full-route-stops{
-                    width: 100px;
-                    height: 28px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    border-radius: 5px;
-                    background-color: #E4E4E4;
-                    font-size: 17px;
-                    font-weight: 100;
-                    margin: 0 15px;
-                }
-                .full-route-duration{
-                    font-size: 14px;
-                }
-            }
-        }
-    }
-    .ticket-airlines{
-        grid-area: airlines;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        .ticket-airline{
-            // display: flex;
-            // justify-content: center;
-            // align-items: center;
-            background-color: $SecondaryBlue;
-            margin: 2px;
-            color: $FontLight;
-            overflow: hidden;
-            max-width: 150px;
-            max-height: 22px;
-            border-radius: 20px;
-            p{
-                padding: 1px 15px;
-                font-size: 14px;
-
-            }
-        }
-    }
-    .ticket-price{
-        grid-area: price;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-bottom-right-radius: 20px;
-        border-top-right-radius: 20px;
-    }
-  
+  div {
+    // border: 1px solid red;
   }
+
+  &:hover {
+    .ticket-hover-color {
+      background-color: $PrimaryGreen;
+    }
+  }
+
+  .ticket-hover-color {
+    grid-area: hoverColor;
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .ticket-short-route {
+    grid-area: shortRoute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    p {
+      font-size: 35px;
+      font-weight: 800;
+    }
+  }
+  .ticket-vertical-divider {
+    grid-area: divider;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    div {
+      height: 80%;
+      border-left: 1px solid $PrimaryBlue;
+    }
+  }
+  .ticket-full-route {
+    grid-area: fullRoute;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .full-route-arrow {
+      // margin: 0 10px;
+      transform: translateY(-8px);
+    }
+    .full-route-box-divider {
+      width: 90%;
+      display: block;
+      height: 1px;
+      border: 0;
+      border-top: 1px solid $PrimaryBlue;
+      padding: 0;
+      margin: 0;
+    }
+    .full-route-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      width: 100%;
+      height: 50%;
+
+      // &:nth-of-type(2){
+      //     border-top: 1px solid $PrimaryBlue;
+      // }
+
+      .full-route-departure-wrap,
+      .full-route-arrival-wrap {
+        width: 75px;
+      }
+      .full-route-airport {
+        font-weight: 600;
+        font-size: 25px;
+      }
+      .full-route-short-date {
+        font-weight: 100;
+        font-size: 14px;
+        transform: translateY(-5px);
+      }
+
+      .full-route-stops-duration-wrap {
+        .full-route-stops {
+          width: 100px;
+          height: 28px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 5px;
+          background-color: #e4e4e4;
+          font-size: 17px;
+          font-weight: 100;
+          margin: 0 15px;
+        }
+        .full-route-duration {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  .ticket-airlines {
+    grid-area: airlines;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .ticket-airline {
+      // display: flex;
+      // justify-content: center;
+      // align-items: center;
+      background-color: $SecondaryBlue;
+      margin: 2px;
+      color: $FontLight;
+      overflow: hidden;
+      max-width: 150px;
+      max-height: 22px;
+      border-radius: 20px;
+      p {
+        padding: 1px 15px;
+        font-size: 14px;
+      }
+    }
+  }
+  .ticket-price {
+    grid-area: price;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-right-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+}
