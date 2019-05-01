@@ -17,6 +17,8 @@
     "fs": "0.0.1-security",
     "moment": "^2.22.2",
     "morgan": "^1.9.1",
-    "skypicker": "^1.0.3"
+    "nodemailer": "^6.1.1",
+    "skypicker": "^1.0.3",
+    "xoauth2": "^1.2.0"
   }
 }

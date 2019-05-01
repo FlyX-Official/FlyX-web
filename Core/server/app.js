@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
+var nodemailer = require('nodemailer');
 
 // routes
 var indexRouter = require('./routes/index');
@@ -10,6 +11,8 @@ var notFoundRouter = require('./routes/notFound');
 var autocompleteRouter = require('./routes/autocomplete');
 var priceTickerRouter = require('./routes/priceTicker');
 var authentication = require('./routes/authentication');
+var notification = require('./routes/notification');
+var notificationJob = require('./jobs/notificationJob');
 
 var app = express();
 
@@ -25,6 +28,7 @@ app.use('/search', searchRouter);
 app.use('/autocomplete', autocompleteRouter);
 app.use('/priceticker', priceTickerRouter);
 app.use('/authentication', authentication);
+app.use('/notification',notification);
 app.use('*', notFoundRouter);
 
 

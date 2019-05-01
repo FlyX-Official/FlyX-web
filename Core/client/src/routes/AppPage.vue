@@ -54,6 +54,7 @@
       <img id='presearch-message' v-if='dispMessage' src="../assets/logo-light.svg">
       <div id='search-spinner' v-if='dispSpinner'></div>
       <ticket v-for="(ticket,i) in ticketsByPrice" @click="setTicketDetails(ticket)" :ticketData="ticket" :key="i"></ticket>
+      <p>Test</p>
     </div>
 
     <div id="app-ticket-details-wrap">
@@ -186,7 +187,29 @@ export default {
         this.ticketDetailsData = null;
         this.isLoading(true);
         this.submitSearch();
+        this,submitFav();
       }
+    },
+    // this function that sends a post request containing 'fav data' for notification
+    submitFav: function() {
+      this.$root.$emit("startedSearch");
+
+      // do post request
+      Api()
+        .post("/notification", this.searchData)
+        .then(response => {
+          console.log(response.data.data);
+          this.isLoading(false);
+          this.ticketsByPrice = response.data.data;
+
+          // This line sends(emits) the ticket data as an event. Other components
+          // can listen for this event to have access to the data that is sent.
+          //  this.$root.$emit("ticketComm", response.data.data);
+        })
+        .catch(error => {
+          // This catches any error the server would send back
+          console.log(error);
+        });
     },
     // This is the function that sends a post request containing 'searchData' to the server
     submitSearch: function() {
