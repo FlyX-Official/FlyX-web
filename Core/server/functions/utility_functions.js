@@ -41,7 +41,7 @@ module.exports.getUnique = function (arr, comp) {
    let airportCodes = []
 
    arr.forEach(element => {
-     airportCodes.push(element._source.AirportCode);
+     airportCodes.push(element._source.IATA);
    });
 
    return airportCodes;

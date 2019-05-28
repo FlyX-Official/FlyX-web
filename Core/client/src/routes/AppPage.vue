@@ -46,7 +46,6 @@
         </div>
       </div>
     </div>
-
     <div id="app-sort-wrap">
       <div id="main-sorts-wrap">
         <div class="main-sort" @click="chooseMainSort('price')" id="sort-by-price">
@@ -130,22 +129,20 @@
               <div class="leg-top leg-row">
                 <img src="../assets/plane-departure.svg" alt>
                 <p class="leg-time">{{converTime(leg.dTimeUTC)}}</p>
-                <p class="leg-airport">{{leg.cityFrom}} - {{leg.flyFrom}}</p>
+                <p class="leg-airport">{{leg.flyFrom}} - {{leg.cityFrom}}</p>
               </div>
               <div class="leg-mid leg-row">
                 <img src="../assets/plane-arrival.svg" alt>
                 <p class="leg-time">{{converTime(leg.aTimeUTC)}}</p>
-                <p class="leg-airport">{{leg.cityTo}} - {{leg.flyTo}}</p>
+                <p class="leg-airport">{{leg.flyTo}} - {{leg.cityTo}}</p>
               </div>
               <div class="leg-bot leg-row">
                 <div>
-                  <p>{{convertAirlineCode(leg.airline)}}</p>
+                  <p>{{convertAirlineCode(leg.airline)}} #{{leg.flight_no}}</p>
                 </div>
                 <div>
-                  <p>Flight #{{leg.flight_no}}</p>
-                </div>
-                <div>
-                  <p>{{getGuarantee(leg)}}</p>
+                  <p class="leg-guaranteed" v-if="leg.guarantee">Guaranteed</p>
+                  <p class="leg-not-guaranteed" v-else>Not Guranteed</p>
                 </div>
               </div>
             </div>
@@ -158,8 +155,8 @@
       <div id="details-buy-btn-wrap">
         <div v-if="ticketDetailsData" id="ticket-buy-btn-trip-brief">
         <p>{{ticketDetailsData.flyFrom}}</p>
-        <img v-if="selectedTicketOneWay" style="width: 15px;" src="../assets/oneway-icon.svg">
-        <img v-else src="../assets/round-trip-icon.svg">
+        <img v-if="selectedTicketOneWay" style="width: 15px;" src="../assets/one-way-white.svg">
+        <img v-else src="../assets/round-trip-white.svg">
         <p>{{ticketDetailsData.flyTo}}</p>
       </div>
 
@@ -257,17 +254,6 @@ export default {
     }
   },
   mounted() {
-    // window.location.reload();
-    // this.myUser = firebase.auth().currentUser;
-    // if (localStorage.getItem("reloaded")) {
-    //   // The page was just reloaded. Clear the value from local storage
-    //   // so that it will reload the next time this page is visited.
-    //   localStorage.removeItem("reloaded");
-    // } else {
-    //   // Set a flag so that we know not to reload the page twice.
-    //   localStorage.setItem("reloaded", "1");
-    //   location.reload();
-    // }
 
     var roundBtn = document.getElementById("round-trip-btn");
     roundBtn.style.fontWeight = 800;
@@ -295,6 +281,8 @@ export default {
       } else {
         this.ticketsByPrice = [];
         this.ticketDetailsData = null;
+        this.searchData.from = this.onlyAirportCode(this.searchData.from);
+        this.searchData.to = this.onlyAirportCode(this.searchData.to);
         this.isLoading(true);
         this.submitSearch();
       }
@@ -403,7 +391,9 @@ export default {
       }
     },
     convertAirlineCode: function(code) {
-      return airlinesCodes.getAirlineName(code);
+      var airlineString = airlinesCodes.getAirlineName(code);
+      airlineString = airlineString.replace("Airlines", "");
+      return airlineString;
     },
     converTime: function(timeSeconds) {
       var timeMoment = moment.unix(timeSeconds);
@@ -413,15 +403,12 @@ export default {
       var dateMoment = moment.unix(rawDate);
       return dateMoment.format("ll");
     },
-    getReturnAirport(ticket) {
+    getReturnAirport: function(ticket) {
       for (var i = 0; i < ticket.route.length; i++) {
         if (ticket.route[i].return == 1) {
           return ticket.route[i].flyFrom;
         }
       }
-    },
-    getGuarantee: function(leg) {
-      return leg.guarantee ? "Guaranteed" : "Not Guaranteed";
     },
     chooseMainSort(sort) {
       if (sort == "price") {
@@ -454,7 +441,11 @@ export default {
       if (a.dTime < b.dTime) return -1;
       if (a.dTime > b.dTime) return 1;
       return 0;
-    }
+    },
+    onlyAirportCode: function(str){
+      var parts = str.split(',');
+      return parts[0];
+    },
   }
 };
 </script>

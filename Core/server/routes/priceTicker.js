@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var priceTicker = require('../jobs/priceTickerJob');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   if(req.query['airportFrom'] == 'LAX'){
     res.send(priceTicker.ticketsLAXToJFK);

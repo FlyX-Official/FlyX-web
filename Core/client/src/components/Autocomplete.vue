@@ -2,7 +2,7 @@
   <div class="autocomplete" v-bind:id="this.id">
     <input type="text" v-model="query" @input="isOpen=true" @blur="closeSuggestions" @keyup.prevent="autocomplete()" v-bind:placeholder="this.placeholder">
     <ul class="autocomplete-results" v-show="isOpen">
-      <li class="autocomplete-result" v-for="(result, i) in results" :key="i" @click="setResult(result)">
+      <li class="autocomplete-result" v-for="(result, i) in results.slice(0,show)" :key="i" @click="setResult(result)">
          <p> {{ result }} </p>
       </li>
     </ul>
@@ -18,7 +18,7 @@ export default {
     show: {
       type: Number,
       required: false,
-      default: () => 5
+      default: () => 7
     },
     value: {
         type: String,
@@ -46,7 +46,7 @@ export default {
       Api()
         .get("/autocomplete?q=" + this.query)
         .then(response => {
-          this.results = response.data.map(a => a.Combined);
+          this.results = response.data.map(a => a._source.Combined);
         });
     },
     closeSuggestions: function () {
@@ -76,9 +76,9 @@ export default {
 <style lang="scss">
 .autocomplete-results {
   position: absolute;
-  width: 300px;
+  width: 400px;
+  max-width: 400px;
   margin-top: 5px;
-  overflow-y: scroll;
   overflow-x: hidden;
   background-color: #fff;
   border-radius: 10px;
@@ -86,14 +86,9 @@ export default {
 }
 
 .autocomplete-result {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  list-style: none;
-  text-align: left;
   overflow-y: hidden;
-  overflow-x: hidden;
-  height: 35px;
+  // height: 35px;
+  width: 100%;
   z-index: 500;
   cursor: pointer;
 
