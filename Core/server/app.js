@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
+var elasticsearch = require('./functions/ES_functions');
 
 // routes
 var indexRouter = require('./routes/index');
@@ -26,7 +27,6 @@ app.use('/autocomplete', autocompleteRouter);
 app.use('/priceticker', priceTickerRouter);
 app.use('/authentication', authentication);
 app.use('*', notFoundRouter);
-
 
 module.exports = app;
 /*
