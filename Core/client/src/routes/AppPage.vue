@@ -76,9 +76,7 @@
           </div>
         </div>
       </div>
-      <div id="sort-stops-wrap">
-
-      </div>
+      <div id="sort-stops-wrap"></div>
       <div id="sort-depart-airports"></div>
       <div id="sort-arrive-airports"></div>
     </div>
@@ -154,11 +152,11 @@
       </div>
       <div id="details-buy-btn-wrap">
         <div v-if="ticketDetailsData" id="ticket-buy-btn-trip-brief">
-        <p>{{ticketDetailsData.flyFrom}}</p>
-        <img v-if="selectedTicketOneWay" style="width: 15px;" src="../assets/one-way-white.svg">
-        <img v-else src="../assets/round-trip-white.svg">
-        <p>{{ticketDetailsData.flyTo}}</p>
-      </div>
+          <p>{{ticketDetailsData.flyFrom}}</p>
+          <img v-if="selectedTicketOneWay" style="width: 15px;" src="../assets/one-way-white.svg">
+          <img v-else src="../assets/round-trip-white.svg">
+          <p>{{ticketDetailsData.flyTo}}</p>
+        </div>
 
         <p id="buy-btn-wrap-price" v-if="ticketDetailsData">${{ticketDetailsData.price}}.00</p>
         <a
@@ -212,12 +210,12 @@ export default {
         radiusFrom: "100",
         radiusTo: "100",
         departureWindow: {
-          start: new Date(),
-          end: new Date()
+          start: new Date(new Date().getTime() + 86400000),
+          end: new Date(new Date().getTime() + 86400000*7)
         },
         returnDepartureWindow: {
-          start: new Date(),
-          end: new Date()
+          start: new Date(new Date().getTime() + 86400000*9),
+          end: new Date(new Date().getTime() + 86400000*16)
         }
       },
       //works like css, for what is disabled we can choose the style to give the content
@@ -254,7 +252,6 @@ export default {
     }
   },
   mounted() {
-
     var roundBtn = document.getElementById("round-trip-btn");
     roundBtn.style.fontWeight = 800;
 
@@ -442,10 +439,10 @@ export default {
       if (a.dTime > b.dTime) return 1;
       return 0;
     },
-    onlyAirportCode: function(str){
-      var parts = str.split(',');
+    onlyAirportCode: function(str) {
+      var parts = str.split(",");
       return parts[0];
-    },
+    }
   }
 };
 </script>
