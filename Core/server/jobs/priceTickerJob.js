@@ -4,21 +4,21 @@ var elasticsearch = require('../functions/ES_functions');
 var Skypicker_API = require('../functions/skypickerAPI_functions');
 var utility_functions = require('../functions/utility_functions');
 
-//var SEARCH_DATE = moment().add(5, 'days').calendar();
+const SEARCH_DATE = moment().add(5, 'days');
 
 const ONE_WAY = true;
 const TICKET_LIMIT = 10;
 
 var departureWindow= {
     start: {
-        date: moment('2019-05-20').date(),
-        month: moment('2019-05-20').month(),
-        year: moment('2019-05-20').year()
+        date: SEARCH_DATE.date(),
+        month: SEARCH_DATE.month(),
+        year: SEARCH_DATE.year()
     },
     end:{
-        date: moment('2019-05-20').date(),
-        month: moment('2019-05-20').month(),
-        year: moment('2019-05-20').year()
+        date: SEARCH_DATE.date(),
+        month: SEARCH_DATE.month(),
+        year: SEARCH_DATE.year()
     }
 };
 
@@ -114,4 +114,4 @@ new CronJob('0 0 */1 * * *', function () {
         })
     })
 
-}, null, true, 'America/Los_Angeles');
+}, null, true, 'America/Los_Angeles', null,true);

@@ -1,32 +1,39 @@
-const express = require('express');
-const cors = require('cors');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-var elasticsearch = require('./functions/ES_functions');
+const express = require("express");
+const cors = require("cors");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+
+const admin = require("firebase-admin");
+var serviceAccount = require("./fb-key.json"); 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 // routes
-var indexRouter = require('./routes/index');
-var searchRouter = require('./routes/search');
-var notFoundRouter = require('./routes/notFound');
-var autocompleteRouter = require('./routes/autocomplete');
-var priceTickerRouter = require('./routes/priceTicker');
-var authentication = require('./routes/authentication');
+var indexRouter = require("./routes/index");
+var searchRouter = require("./routes/search");
+var notFoundRouter = require("./routes/notFound");
+var autocompleteRouter = require("./routes/autocomplete");
+// var priceTickerRouter = require("./routes/priceTicker");
+var authentication = require("./routes/authentication");
+var verifyNewUser = require("./routes/verifyNewUser");
 
 var app = express();
 
 app.use(cors());
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
-app.use('/search', searchRouter);
-app.use('/autocomplete', autocompleteRouter);
-app.use('/priceticker', priceTickerRouter);
-app.use('/authentication', authentication);
-app.use('*', notFoundRouter);
+app.use("/", indexRouter);
+app.use("/search", searchRouter);
+app.use("/autocomplete", autocompleteRouter);
+// app.use("/priceticker", priceTickerRouter);
+app.use("/authentication", authentication);
+app.use("/verifynewuser", verifyNewUser);
+app.use("*", notFoundRouter);
 
 module.exports = app;
 /*
