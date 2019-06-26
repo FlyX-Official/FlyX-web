@@ -53,10 +53,10 @@
             <form id="register-form" @submit.prevent="submitRegister()">
               <input
                 type="text"
-                v-model="registerData.username"
+                v-model="registerData.name"
                 class="signIn-register-input"
                 required
-                placeholder="Username"
+                placeholder="Full Name"
               >
               <input
                 type="email"
@@ -129,7 +129,7 @@
 import Api from "@/services/Api";
 import PriceTicker from "@/components/PriceTicker";
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
-import firebase from "firebase/app";
+import firebase, { functions } from "firebase/app";
 import "firebase/auth";
 
 export default {
@@ -142,7 +142,7 @@ export default {
   data() {
     return {
       registerData: {
-        username: "",
+        name: "",
         email: "",
         password: "",
         confirmPassword: ""
@@ -177,7 +177,10 @@ export default {
     submitSignInSocial: function(social) {
       this.$refs.tabbedModal.close();
       this.$store.dispatch('signInWithSocial', social);
-    }
+    },
+    alertVerifyEmail: function() {
+      this.$snackbar.open(`Default, positioned bottom-right with a green 'OK' button`)
+    },
   }
 };
 </script>

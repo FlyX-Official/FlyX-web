@@ -134,19 +134,19 @@
         }
       }
       #nav-profile-picture {
-        border: 2px solid #fff;
+        // border: 2px solid #fff;
         background-color: #fff;
-        width: 50px;
-        height: 50px;
+        width: 55px;
+        height: 55px;
         border-radius: 100%;
         margin: 0 20px;
         cursor: pointer;
 
         img {
-          width: 50px;
-          height: 50px;
           border-radius: 100%;
           object-fit: fill;
+          border: 2px solid #fff;
+
         }
       }
     }
@@ -157,75 +157,71 @@
     display: grid;
     grid-template-columns: 20px 150px 150px 1fr 1fr 20px;
     grid-template-rows: 1fr;
-    grid-template-areas: 
-    ". mainSorts stopSort departSort arriveSort .";
+    grid-template-areas: ". mainSorts stopSort departSort arriveSort .";
 
-    #main-sorts-wrap{
+    #main-sorts-wrap {
       grid-area: mainSorts;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
 
-      .main-sort{
+      .main-sort {
         width: 90%;
         height: 27%;
         margin: 2px 0;
-        display:grid;
+        display: grid;
         grid-template-columns: 10px 1fr;
         grid-template-rows: 1fr;
-        grid-template-areas: 
-        "sortLeft sortRight";
+        grid-template-areas: "sortLeft sortRight";
         border-radius: 5px;
         cursor: pointer;
         background-color: #fff;
 
-        &:hover{
-          .main-sort-left{
+        &:hover {
+          .main-sort-left {
             background-color: $PrimaryGreen;
           }
         }
 
-        .main-sort-left{
+        .main-sort-left {
           grid-area: sortLeft;
           border-top-left-radius: 5px;
           border-bottom-left-radius: 5px;
 
-          .sort-checked{
+          .sort-checked {
             background-color: $PrimaryGreen;
-             width: 100%;
-             height: 100%;
-             border-bottom-left-radius: 5px;
-             border-top-left-radius: 5px;
+            width: 100%;
+            height: 100%;
+            border-bottom-left-radius: 5px;
+            border-top-left-radius: 5px;
           }
         }
-        .main-sort-right{
+        .main-sort-right {
           grid-area: sortRight;
           display: flex;
           justify-content: center;
           align-items: center;
-          p{
-            transform:translateX(-5px);
+          p {
+            transform: translateX(-5px);
             user-select: none;
           }
-          .chosen-main-sort{
+          .chosen-main-sort {
             color: $SecondaryBlue;
             font-weight: 800;
           }
         }
-
       }
     }
-    #sort-stops-wrap{
+    #sort-stops-wrap {
       grid-area: stopSort;
     }
-    #sort-depart-airports{
+    #sort-depart-airports {
       grid-area: departSort;
     }
-    #sort-arrive-airports{
+    #sort-arrive-airports {
       grid-area: arriveSort;
     }
-
   }
   #app-tickets-wrap {
     grid-area: ticketsWrap;
@@ -285,7 +281,7 @@
         background: #9b9b9b;
         border-radius: 20px;
       }
-      
+
       .text-inner-wrap {
         width: 100%;
 
@@ -299,9 +295,9 @@
             border-radius: 5px;
             padding: 10px;
 
-            .leg-date-row{
+            .leg-date-row {
               margin-bottom: 10px;
-              p{
+              p {
                 font-weight: 600;
               }
             }
@@ -316,6 +312,10 @@
                 margin: 0 10px;
                 font-size: 20px;
                 margin: 5px 15px;
+
+                .leg-airport-code{
+                  font-weight: 600;
+                }
               }
               .leg-time {
                 color: #8a817c;
@@ -331,34 +331,54 @@
                 margin: 2px;
                 color: $FontLight;
                 overflow: hidden;
-                max-height: 22px;
-                border-radius: 20px;
+                border-radius: 5px;
+                padding: 0px 15px;
                 p {
-                  padding: 1px 15px;
                   font-size: 14px;
                 }
               }
-              .leg-guaranteed{
+              .leg-guaranteed {
                 background-color: $PrimaryGreen;
               }
-              .leg-not-guaranteed{
-                background-color: #FF6B6B;
+              .leg-not-guaranteed {
+                background-color: #ff6b6b;
               }
             }
           }
           .layover {
-            width: 200px;
-            height: 30px;
+            width: fit-content;
+            height: 35px;
             display: flex;
-            justify-content: center;
-            align-items: center;
+              justify-content: center;
+              align-items: center;
             margin: 0 auto;
-            border-radius: 5px;
-            background-color: $PrimaryBlue;
+            border-radius: 30px;
+            background-color: #e4e4e4;
 
-            p {
-              color: $FontLight;
-              font-weight: 600;
+            .layover-clock-wrap {
+              height: 100%;
+              width: 20%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              .layover-clock-img {
+                width: 23px;
+                margin: 0 10px;
+              }
+            }
+            .layover-text-wrap {
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              p {
+                color: $FontDark;
+                font-weight: 400;
+                font-size: 14px;
+                margin: 0 10px;
+              }
             }
           }
         }
@@ -372,31 +392,29 @@
       align-items: center;
       background-color: $PrimaryBlue;
 
-      #ticket-buy-btn-trip-brief{
+      #ticket-buy-btn-trip-brief {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: row;
-  
-        img{
+
+        img {
           transform: rotate(-90deg);
           margin: 0 20px;
           width: 20px;
         }
-        p{
+        p {
           font-size: 25px;
           font-weight: 800;
-          color: $FontLight
+          color: $FontLight;
         }
-  
       }
 
-      #buy-btn-wrap-price{
+      #buy-btn-wrap-price {
         font-size: 25px;
         font-weight: 600;
         margin: 0 20px;
-          color: $FontLight;
-        
+        color: $FontLight;
       }
 
       #buy-btn {
@@ -423,7 +441,6 @@
         &:active {
           background-color: $PrimaryGreen;
         }
-      
       }
     }
   }
@@ -476,12 +493,12 @@
     border-top-left-radius: 20px;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-    .ticket-checked{
+    .ticket-checked {
       background-color: $PrimaryGreen;
-       width: 100%;
-       height: 100%;
-       border-bottom-left-radius: 20px;
-       border-top-left-radius: 20px;
+      width: 100%;
+      height: 100%;
+      border-bottom-left-radius: 20px;
+      border-top-left-radius: 20px;
     }
   }
   .ticket-short-route {
@@ -605,5 +622,10 @@
     align-items: center;
     border-bottom-right-radius: 20px;
     border-top-right-radius: 20px;
+
+    h1{
+      font-size: 35px;
+      font-weight: 800;
+    }
   }
 }

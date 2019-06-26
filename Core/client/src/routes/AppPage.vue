@@ -42,7 +42,8 @@
           <p>{{currUserDisplayName}}</p>
         </div>
         <div @click="openProfileModal()" id="nav-profile-picture">
-          <img v-bind:src="currUserPhotoURL" alt>
+          <img v-if="currUser.photoURL == null" src="../assets/user-circle.svg" alt>
+          <img v-else v-bind:src="currUserPhotoURL" alt>
         </div>
       </div>
     </div>
@@ -127,25 +128,32 @@
               <div class="leg-top leg-row">
                 <img src="../assets/plane-departure.svg" alt>
                 <p class="leg-time">{{converTime(leg.dTimeUTC)}}</p>
-                <p class="leg-airport">{{leg.flyFrom}} - {{leg.cityFrom}}</p>
+                <p class="leg-airport"><span class="leg-airport-code">{{leg.flyFrom}}</span> - {{leg.cityFrom}}</p>
               </div>
               <div class="leg-mid leg-row">
                 <img src="../assets/plane-arrival.svg" alt>
                 <p class="leg-time">{{converTime(leg.aTimeUTC)}}</p>
-                <p class="leg-airport">{{leg.flyTo}} - {{leg.cityTo}}</p>
+                <p class="leg-airport"><span class="leg-airport-code">{{leg.flyTo}}</span> - {{leg.cityTo}}</p>
               </div>
               <div class="leg-bot leg-row">
                 <div>
                   <p>{{convertAirlineCode(leg.airline)}} #{{leg.flight_no}}</p>
                 </div>
-                <div>
-                  <p class="leg-guaranteed" v-if="leg.guarantee">Guaranteed</p>
-                  <p class="leg-not-guaranteed" v-else>Not Guranteed</p>
+                <div class="leg-guaranteed" v-if="leg.guarantee">
+                  <p>Guaranteed</p>
+                </div>
+                <div class="leg-not-guaranteed" v-else>
+                  <p>Not Guranteed</p>
                 </div>
               </div>
             </div>
             <div v-if="ticketDetailsData.route[i+1]" class="layover">
-              <p>{{determineLayoverTime(leg, ticketDetailsData.route[i+1])}}</p>
+              <div class="layover-clock-wrap">
+                <img class="layover-clock-img" src="../assets/clock.svg">
+              </div>
+              <div class="layover-text-wrap">
+                <p>{{determineLayoverTime(leg, ticketDetailsData.route[i+1])}}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -204,6 +212,7 @@ export default {
       // searchData is the object that exists in our nav component
       // to temporarily store the input form data
       searchData: {
+        uid: this.$store.getters.currUserID,
         oneWay: false,
         from: "",
         to: "",
@@ -211,11 +220,11 @@ export default {
         radiusTo: "100",
         departureWindow: {
           start: new Date(new Date().getTime() + 86400000),
-          end: new Date(new Date().getTime() + 86400000*7)
+          end: new Date(new Date().getTime() + 86400000 * 7)
         },
         returnDepartureWindow: {
-          start: new Date(new Date().getTime() + 86400000*9),
-          end: new Date(new Date().getTime() + 86400000*16)
+          start: new Date(new Date().getTime() + 86400000 * 9),
+          end: new Date(new Date().getTime() + 86400000 * 16)
         }
       },
       //works like css, for what is disabled we can choose the style to give the content
@@ -233,13 +242,13 @@ export default {
       dispMessage: true,
       dispSpinner: false,
       ticketDetailsData: "",
-      selectedTicketOneWay: Boolean
+      selectedTicketOneWay: Boolean,
+      isOutOfSearches: false
     };
   },
   computed: {
     currUserEmail() {
       var currUser = this.$store.state.USER;
-      console.log(currUser);
       return currUser === null ? "not logged in" : currUser.email;
     },
     currUserDisplayName() {
@@ -249,7 +258,16 @@ export default {
     currUserPhotoURL() {
       var currUser = this.$store.state.USER;
       return currUser === null ? "not logged in" : currUser.photoURL;
-    }
+    },
+    currUserID() {
+      return this.$store.getters.currUserID;
+    },
+    currUserEmailVerified() {
+      return this.$store.state.USER.emailVerified;
+    },
+    currUser() {
+      return this.$store.state.USER;
+    },
   },
   mounted() {
     var roundBtn = document.getElementById("round-trip-btn");
@@ -275,6 +293,8 @@ export default {
     validateInput: function() {
       if (this.searchData.from == "" || this.searchData.to == "") {
         alert("Please fill out all fields");
+      }else if(!this.$store.state.USER.emailVerified){
+        alert("Please verify your email before searching");
       } else {
         this.ticketsByPrice = [];
         this.ticketDetailsData = null;
@@ -293,21 +313,31 @@ export default {
         .post("/search", this.searchData)
         .then(response => {
           this.isLoading(false);
-          this.ticketsByPrice = response.data.data;
 
-          this.ticketsByPrice = [];
-          this.ticketsByDuration = [];
-          this.ticketsByDate = [];
+          if (response.data.code == 1) {
+            let tickets = response.data.tickets.data
 
-          this.ticketsByPrice = response.data.data.slice();
-          this.ticketsByDuration = response.data.data.slice();
-          this.ticketsByDate = response.data.data.slice();
+            this.ticketsByPrice = [];
+            this.ticketsByDuration = [];
+            this.ticketsByDate = [];
 
-          this.ticketsByPrice.sort(this.comparePrice);
-          this.ticketsByDuration.sort(this.compareDuration);
-          this.ticketsByDate.sort(this.compareDate);
+            this.ticketsByPrice = tickets.slice();
+            this.ticketsByDuration = tickets.slice();
+            this.ticketsByDate = tickets.slice();
 
-          this.isSortPrice = true;
+            this.ticketsByPrice.sort(this.comparePrice);
+            this.ticketsByDuration.sort(this.compareDuration);
+            this.ticketsByDate.sort(this.compareDate);
+
+            this.isSortPrice = true;
+
+          } else if (response.data.code == 0) {
+            this.isOutOfSearches = true;
+            alert('out of searches');
+          } else {
+            // ***** NEED ERROR HANDLING *******
+            console.log('Something went wrong with the search');
+          }
         })
         .catch(error => {
           // This catches any error the server would send back

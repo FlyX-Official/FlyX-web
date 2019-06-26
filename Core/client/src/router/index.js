@@ -38,19 +38,14 @@ router.beforeEach(async (to, from, next) => {
   let requriesAuth = to.matched.some(record => record.meta.requiresAuth);
 
   if (requriesAuth && !currentUser) {
-    console.log('App Guard Case 1');
     next('/');
   } else if (!requriesAuth && !currentUser) {
-    console.log('App Guard Case 2');
     next();
   }else if (!requriesAuth && currentUser){
-    console.log('App Guard Case 3');
     next('/app');
   }else if (requriesAuth && currentUser){
-    console.log('App Guard Case 4');
     next();
   }else{
-    console.log('App Guard Case 5');
     next(Error);
   }
 });

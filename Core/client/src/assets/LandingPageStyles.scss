@@ -179,7 +179,8 @@
 
         .ticker{
             z-index: 2;
-            transform: translateY(-35px);
+            display: none;
+            // transform: translateY(-35px);
         }
         #ticker1-wrap{
             grid-area: ticker1;

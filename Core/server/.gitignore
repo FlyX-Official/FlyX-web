@@ -5,6 +5,7 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+fb-key.json
 
 # Log files
 npm-debug.log*
