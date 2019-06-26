@@ -34,28 +34,31 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    // Sign in with email and password
     signIn(context, userInfo) {
       firebase
         .auth()
         .signInWithEmailAndPassword(userInfo.email, userInfo.password)
         .then(result => {
 
+          // If user email is not verified, alert them
           if (!result.user.emailVerified){
             alert('Please verify your email address before signing in');
           }
+
           // // send user id to server to check if new user
           Api()
             .post("/verifynewuser", { uid: result.user.uid })
             .then(response => {
               alert(`[store.js] ${response.data.message}`);
             });
-            console.log(result.user);
         })
         .catch(error => {
           // Error Handling
           alert(error.message);
         });
     },
+    // Sign in with provider
     signInWithSocial(context, social) {
       if (social == "google") {
         var provider = new firebase.auth.GoogleAuthProvider();
@@ -68,6 +71,7 @@ export const store = new Vuex.Store({
       } else {
         alert("provider error");
       }
+
       firebase
         .auth()
         .signInWithPopup(provider)
@@ -77,12 +81,13 @@ export const store = new Vuex.Store({
           var token = result.credential.accessToken;
           // The signed-in user info.
           var user = result.user;
+
+          // post request to server to insert user into DB
           Api()
             .post("/verifynewuser", { uid: user.uid })
             .then(response => {
               alert(`[store.js] ${response.data.message}`);
             });
-            console.log(result.user);
         })
         .catch(function(error) {
           // Handle Errors here.
@@ -96,6 +101,7 @@ export const store = new Vuex.Store({
           alert(error.message);
         });
     },
+    // Sign out
     signOut() {
       firebase
         .auth()
@@ -105,6 +111,7 @@ export const store = new Vuex.Store({
           alert(error.message);
         });
     },
+    // Register with email and password
     register(context, userInfo) {
       firebase
         .auth()

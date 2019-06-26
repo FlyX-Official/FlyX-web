@@ -16,6 +16,7 @@ export default {
         if (user.emailVerified) {
           this.$store.commit("initUser", user);
           this.$router.push("/app");
+          console.log(user);
         } else {
           firebase
             .auth()
