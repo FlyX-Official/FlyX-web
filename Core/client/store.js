@@ -5,6 +5,7 @@ import VuexPersist from "vuex-persist";
 import firebase from "firebase/app";
 import "firebase/auth";
 import Api from "./src/services/Api";
+import { Snackbar } from 'buefy/dist/components/snackbar'
 
 Vue.use(Vuex);
 
@@ -43,14 +44,16 @@ export const store = new Vuex.Store({
 
           // If user email is not verified, alert them
           if (!result.user.emailVerified){
-            alert('Please verify your email address before signing in');
+            Snackbar.open({
+              message: 'Please verify your email before signing in',
+              position: 'is-top'});
           }
 
           // // send user id to server to check if new user
           Api()
             .post("/verifynewuser", { uid: result.user.uid })
             .then(response => {
-              alert(`[store.js] ${response.data.message}`);
+              // alert(`[store.js] ${response.data.message}`);
             });
         })
         .catch(error => {
@@ -86,7 +89,7 @@ export const store = new Vuex.Store({
           Api()
             .post("/verifynewuser", { uid: user.uid })
             .then(response => {
-              alert(`[store.js] ${response.data.message}`);
+              // alert(`[store.js] ${response.data.message}`);
             });
         })
         .catch(function(error) {
@@ -123,7 +126,7 @@ export const store = new Vuex.Store({
             displayName: userInfo.name,
           }).then(function() {
             // Update successful.
-            alert('updated user');
+            // alert('updated user');
           }).catch(function(error) {
             // An error happened.
             alert('updated user error');
@@ -132,7 +135,10 @@ export const store = new Vuex.Store({
           // Send verification email
           result.user.sendEmailVerification().then(function() {
             // Email sent.
-            alert('sent verification email');
+            // alert('sent verification email');
+            Snackbar.open({
+              message: 'A verification email has been sent to you!',
+              position: 'is-bottom-left'});
           }).catch(function(error) {
             // An error happened.
             alert('email verification error');
@@ -142,7 +148,7 @@ export const store = new Vuex.Store({
           Api()
             .post("/verifynewuser", { uid: result.user.uid })
             .then(response => {
-              alert(`[store.js] ${response.data.message}`);
+              // alert(`[store.js] ${response.data.message}`);
             });
         })
         .catch(error => {
