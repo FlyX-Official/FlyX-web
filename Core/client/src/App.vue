@@ -13,8 +13,18 @@ export default {
   mounted() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.$store.commit("initUser", user);
-        this.$router.push("/app");
+        if (user.emailVerified) {
+          this.$store.commit("initUser", user);
+          this.$router.push("/app");
+        } else {
+          firebase
+            .auth()
+            .signOut()
+            .catch(error => {
+              // Error Handling
+              alert(error.message);
+            });
+        }
         console.log("user is logged in");
       } else {
         this.$store.commit("initUser", null);

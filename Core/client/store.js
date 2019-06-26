@@ -39,11 +39,17 @@ export const store = new Vuex.Store({
         .auth()
         .signInWithEmailAndPassword(userInfo.email, userInfo.password)
         .then(result => {
-          console.log('signed in via textbox');
+
+          if (!result.user.emailVerified){
+            alert('Please verify your email address before signing in');
+          }
           // // send user id to server to check if new user
-          // Api()
-          //   .post("/verifynewuser", { uid: result.user.uid })
-          //   .then(response => {});
+          Api()
+            .post("/verifynewuser", { uid: result.user.uid })
+            .then(response => {
+              alert(`[store.js] ${response.data.message}`);
+            });
+            console.log(result.user);
         })
         .catch(error => {
           // Error Handling
@@ -76,6 +82,7 @@ export const store = new Vuex.Store({
             .then(response => {
               alert(`[store.js] ${response.data.message}`);
             });
+            console.log(result.user);
         })
         .catch(function(error) {
           // Handle Errors here.
@@ -103,7 +110,28 @@ export const store = new Vuex.Store({
         .auth()
         .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
         .then(result => {
-          console.log('signed in via register');
+
+          // Set display name
+          result.user.updateProfile({
+            displayName: userInfo.name,
+          }).then(function() {
+            // Update successful.
+            alert('updated user');
+          }).catch(function(error) {
+            // An error happened.
+            alert('updated user error');
+          });
+
+          // Send verification email
+          result.user.sendEmailVerification().then(function() {
+            // Email sent.
+            alert('sent verification email');
+          }).catch(function(error) {
+            // An error happened.
+            alert('email verification error');
+          });
+
+          // post request to server to insert user into DB
           Api()
             .post("/verifynewuser", { uid: result.user.uid })
             .then(response => {

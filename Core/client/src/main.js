@@ -7,13 +7,15 @@ import VCalendar from 'v-calendar'
 import dotenv from 'dotenv'
 import { store } from '../store' 
 import './authentication/firebaseConn'
+import Snackbar from 'buefy/dist/components/snackbar'
 
 import 'v-calendar/lib/v-calendar.min.css'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import 'buefy/dist/buefy.css'
 
 dotenv.config()
 Vue.use(VCalendar);
 Vue.use(router);
+Vue.use(Snackbar);
 
 /*
 ***** Enable production mode *********
