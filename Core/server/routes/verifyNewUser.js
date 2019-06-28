@@ -3,6 +3,22 @@ const admin = require("firebase-admin");
 var router = express.Router();
 var db = admin.firestore();
 
+/**
+ * @api {post} /verifynewuser/        Verify New User 
+ * @apiName VerifyNewUser
+ * @apiGroup User
+ *
+ * @apiParam {String} uid             User's firebase AUTH user ID
+ *
+ * @apiSuccess {Object} data          Response data object
+ * @apiSuccess {Number} data.code     Response code = 1
+ * @apiSuccess {String} data.message  Response message
+ * 
+ * @apiError {Object} data            Response data object
+ * @apiError {Number} data.code       Response code = 0
+ * @apiError {String} data.message    Response message
+ * 
+ */
 router.post("/", function(req, res, next) {
   let uid = req.body.uid;
 
