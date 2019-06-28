@@ -51,7 +51,55 @@
         <div class="signIn-register-container">
           <div class="left">
             <form id="register-form" @submit.prevent="submitRegister()">
-              <input
+              <b-field>
+                <b-input
+                  placeholder="Full Name"
+                  v-model="registerData.name"
+                  type="text"
+                  icon="user-edit"
+                  required
+                ></b-input>
+              </b-field>
+              <b-field>
+                <b-input
+                  placeholder="Email"
+                  v-model="registerData.email"
+                  required
+                  type="email"
+                  icon="envelope"
+                ></b-input>
+              </b-field>
+              <b-field>
+                <b-input
+                  type="password"
+                  v-model="registerData.password"
+                  required
+                  placeholder="Password"
+                  icon="key"
+                  password-reveal
+                ></b-input>
+              </b-field>
+              <b-field>
+                <b-input
+                  type="password"
+                  v-model="registerData.confirmPassword"
+                  required
+                  placeholder="Confirm Password"
+                  icon="key"
+                  password-reveal
+                ></b-input>
+              </b-field>
+              <b-field>
+                <b-button
+                  class="is-fullwidth is-secondary"
+                  size="is-medium"
+                  icon-left="check"
+                  native-type="submit"
+                  :loading="isRegisterLoading"
+                >Register</b-button>
+              </b-field>
+
+              <!-- <input
                 type="text"
                 v-model="registerData.name"
                 class="signIn-register-input"
@@ -78,15 +126,15 @@
                 class="signIn-register-input"
                 required
                 placeholder="Re-Type Password"
-              >
-              <button class="signIn-register-submit-btn" type="submit">Register</button>
+              >-->
+              <!-- <button class="signIn-register-submit-btn" type="submit">Register</button> -->
             </form>
           </div>
           <div class="right">
             <img @click="submitSignInSocial('google')" src="@/assets/google_sign_in.svg">
             <img @click="submitSignInSocial('facebook')" src="@/assets/facebook_sign_in.svg">
             <img @click="submitSignInSocial('twitter')" src="@/assets/twitter_sign_in.svg">
-            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg"> 
+            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg">
           </div>
         </div>
       </sweet-modal-tab>
@@ -94,7 +142,33 @@
         <div class="signIn-register-container">
           <div class="left">
             <form id="signIn-form" @submit.prevent="submitSignIn()">
-              <input
+            <b-field>
+              <b-input
+                placeholder="Email"
+                v-model="signInData.email"
+                required
+                type="email"
+                icon="envelope"
+              ></b-input>
+            </b-field>
+            <b-field>
+              <b-input
+                type="password"
+                v-model="signInData.password"
+                required
+                placeholder="Password"
+                icon="key"
+                password-reveal
+              ></b-input>
+            </b-field>
+            <b-field>
+              <b-button
+                class="is-fullwidth is-secondary"
+                size="is-medium"
+                native-type="submit"
+              >Sign In</b-button>
+            </b-field>
+              <!-- <input
                 type="email"
                 v-model="signInData.email"
                 class="signIn-register-input"
@@ -108,14 +182,14 @@
                 required
                 placeholder="Password"
               >
-              <button class="signIn-register-submit-btn" type="submit">Sign In</button>
+              <button class="signIn-register-submit-btn" type="submit">Sign In</button> -->
             </form>
           </div>
           <div class="right">
             <img @click="submitSignInSocial('google')" src="@/assets/google_sign_in.svg">
             <img @click="submitSignInSocial('facebook')" src="@/assets/facebook_sign_in.svg">
             <img @click="submitSignInSocial('twitter')" src="@/assets/twitter_sign_in.svg">
-            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg"> 
+            <img @click="submitSignInSocial('github')" src="@/assets/github_sign_in.svg">
           </div>
         </div>
       </sweet-modal-tab>
@@ -150,11 +224,15 @@ export default {
       signInData: {
         email: "",
         password: ""
-      }
+      },
+      isRegisterLoading: false,
+      isSignInLoading: false,
     };
   },
   mounted() {
-    
+    // this.$root.$on('finishedRegister', () => {
+    //   this.$refs.tabbedModal.close();
+    // });
   },
   methods: {
     openRegisterModal: function() {
@@ -167,19 +245,23 @@ export default {
 
     submitRegister: function() {
       this.$refs.tabbedModal.close();
-      this.$store.dispatch('register', this.registerData);
+      // this.isRegisterLoading = true;
+      this.$store.dispatch("register", this.registerData);
+      this.registerData = {};
+      this.signInData = {};
     },
 
     submitSignIn: function() {
       this.$refs.tabbedModal.close();
-      this.$store.dispatch('signIn', this.signInData);
+      this.$store.dispatch("signIn", this.signInData);
+      this.registerData = {};
+      this.signInData = {};
     },
     submitSignInSocial: function(social) {
       this.$refs.tabbedModal.close();
-      this.$store.dispatch('signInWithSocial', social);
-    },
-    alertVerifyEmail: function() {
-      this.$snackbar.open(`Default, positioned bottom-right with a green 'OK' button`)
+      this.$store.dispatch("signInWithSocial", social);
+      this.registerData = {};
+      this.signInData = {};
     },
   }
 };
