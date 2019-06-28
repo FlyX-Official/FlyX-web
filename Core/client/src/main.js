@@ -7,15 +7,22 @@ import VCalendar from 'v-calendar'
 import dotenv from 'dotenv'
 import { store } from '../store' 
 import './authentication/firebaseConn'
-import Snackbar from 'buefy/dist/components/snackbar'
+import Buefy from 'buefy'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import 'v-calendar/lib/v-calendar.min.css'
-import 'buefy/dist/buefy.css'
+
+library.add(faUserSecret)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 dotenv.config()
 Vue.use(VCalendar);
 Vue.use(router);
-Vue.use(Snackbar);
+Vue.use(Buefy,{
+  defaultIconPack: 'fas'
+});
 
 /*
 ***** Enable production mode *********

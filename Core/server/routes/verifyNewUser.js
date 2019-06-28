@@ -15,7 +15,7 @@ router.post("/", function(req, res, next) {
     totalSearches: 0,
     admin: false,
     beta: true,
-  }).then((res) => {
+  }).then(response => {
     console.log(`User inserted into DB`);
     res.send({code: 1, message: 'Inserted user into database'});
   }).catch((err) => {

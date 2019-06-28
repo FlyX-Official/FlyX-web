@@ -5,7 +5,7 @@ import VuexPersist from "vuex-persist";
 import firebase from "firebase/app";
 import "firebase/auth";
 import Api from "./src/services/Api";
-import { Snackbar } from 'buefy/dist/components/snackbar'
+import { Snackbar } from "buefy/dist/components/snackbar";
 
 Vue.use(Vuex);
 
@@ -42,19 +42,24 @@ export const store = new Vuex.Store({
         .signInWithEmailAndPassword(userInfo.email, userInfo.password)
         .then(result => {
 
-          // If user email is not verified, alert them
-          if (!result.user.emailVerified){
+          // If user email is verified, do post request to server to verify
+          // they are in firestore DB
+          if (result.user.emailVerified) {
+            // send user id to server to check if new user
+            Api()
+              .post("/verifynewuser", { uid: result.user.uid })
+              .then(response => {
+                // alert(`[store.js] ${response.data.message}`);
+              });
+
+          // if user email is NOT verified, alert them
+          } else {
             Snackbar.open({
-              message: 'Please verify your email before signing in',
-              position: 'is-top'});
+              message: "Please verify your email before signing in",
+              position: "is-top"
+            });
           }
 
-          // // send user id to server to check if new user
-          Api()
-            .post("/verifynewuser", { uid: result.user.uid })
-            .then(response => {
-              // alert(`[store.js] ${response.data.message}`);
-            });
         })
         .catch(error => {
           // Error Handling
@@ -79,15 +84,13 @@ export const store = new Vuex.Store({
         .auth()
         .signInWithPopup(provider)
         .then(function(result) {
-          console.log('signed in via provider');
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          var token = result.credential.accessToken;
-          // The signed-in user info.
-          var user = result.user;
 
-          // post request to server to insert user into DB
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          // var token = result.credential.accessToken;
+
+          // send user id to server to check if new user
           Api()
-            .post("/verifynewuser", { uid: user.uid })
+            .post("/verifynewuser", { uid: result.user.uid })
             .then(response => {
               // alert(`[store.js] ${response.data.message}`);
             });
@@ -121,35 +124,35 @@ export const store = new Vuex.Store({
         .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
         .then(result => {
 
-          // Set display name
-          result.user.updateProfile({
-            displayName: userInfo.name,
-          }).then(function() {
-            // Update successful.
-            // alert('updated user');
-          }).catch(function(error) {
-            // An error happened.
-            alert('updated user error');
-          });
-
-          // Send verification email
-          result.user.sendEmailVerification().then(function() {
-            // Email sent.
-            // alert('sent verification email');
-            Snackbar.open({
-              message: 'A verification email has been sent to you!',
-              position: 'is-bottom-left'});
-          }).catch(function(error) {
-            // An error happened.
-            alert('email verification error');
-          });
-
-          // post request to server to insert user into DB
-          Api()
-            .post("/verifynewuser", { uid: result.user.uid })
-            .then(response => {
-              // alert(`[store.js] ${response.data.message}`);
+          // Set user display name (in google auth)
+          result.user
+            .updateProfile({
+              displayName: userInfo.name
+            })
+            .then(function() {
+              // Update successful.
+            })
+            .catch(function(error) {
+              // An error happened.
+              alert("updated user error");
             });
+
+          // Send verification email to users email address
+          result.user
+            .sendEmailVerification()
+            .then(function() {
+              
+              // Email sent.
+              Snackbar.open({
+                message: "A verification email has been sent to you!",
+                position: "is-bottom-left"
+              });
+            })
+            .catch(function(error) {
+              // An error happened.
+              alert("email verification error");
+            });
+            
         })
         .catch(error => {
           // Error Handling

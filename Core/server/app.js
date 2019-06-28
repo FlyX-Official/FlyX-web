@@ -14,7 +14,7 @@ var indexRouter = require("./routes/index");
 var searchRouter = require("./routes/search");
 var notFoundRouter = require("./routes/notFound");
 var autocompleteRouter = require("./routes/autocomplete");
-// var priceTickerRouter = require("./routes/priceTicker");
+var priceTickerRouter = require("./routes/priceTicker");
 var authentication = require("./routes/authentication");
 var verifyNewUser = require("./routes/verifyNewUser");
 
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/search", searchRouter);
 app.use("/autocomplete", autocompleteRouter);
-// app.use("/priceticker", priceTickerRouter);
+app.use("/priceticker", priceTickerRouter);
 app.use("/authentication", authentication);
 app.use("/verifynewuser", verifyNewUser);
 app.use("*", notFoundRouter);
