@@ -7,6 +7,54 @@ var db = admin.firestore();
 
 const TICKET_LIMIT = 100;
 
+/**
+ * @api {post} /search/ Search For Tickets
+ * @apiName SearchTickets
+ * @apiGroup Search
+ *
+ * @apiParam {Object} body  
+ * @apiParam {String} body.uid                                  Firebase Auth User ID
+ * @apiParam {Boolean} body.oneWay                              Boolean Representing One Way/Round Trip
+ * @apiParam {String} body.from                                 Airport IATA Code
+ * @apiParam {String} body.to                                   Airport IATA Code
+ * @apiParam {String} body.radiusFrom                           Radius around departure airport
+ * @apiParam {String} body.radiusTo                             Radius around arrival airport
+ * @apiParam {Object} body.departureWindow                      
+ * @apiParam {Date} body.departureWindow.start              Start of departure window
+ * @apiParam {Date} body.departureWindow.end                End of depparture window
+ * @apiParam {Object} body.returnDepartureWindow    
+ * @apiParam {Date} body.returnDepartureWindow.start        Start of return departure window
+ * @apiParam {Date} body.returnDepartureWindow.end          End of return departure window
+ * 
+ * @apiParamExample {json} Request-Structure-Example:
+ *     searchData: {
+ *       uid: "abc123def456ghi789jkl",
+ *       oneWay: false,
+ *       from: "LAX",
+ *       to: "JFK",
+ *       radiusFrom: "100",
+ *       radiusTo: "100",
+ *       departureWindow: {
+ *         start: new Date(),
+ *         end: new Date()
+ *       },
+ *       returnDepartureWindow: {
+ *         start: new Date(),
+ *         end: new Date()
+ *       }
+ *     }            
+ *
+ * @apiSuccess {Number} code                  Response code
+ * @apiSuccess {String} message               Response message
+ * @apiSuccess {Object} [tickets]               Tickets Object
+ * @apiSuccess {Array} [tickets.data]           Array of tickets in tickets object
+ * @apiSuccess {Number} remainingSearches     User's remaining searches
+ * 
+ * @apiError {string} code            Response code
+ * @apiError {String} message         Response message
+ * 
+ */
+
 router.post("/", function(req, res, next) {
   var userInput = {
     uid: req.body.uid,
@@ -83,7 +131,8 @@ router.post("/", function(req, res, next) {
               res.send({
                 code: 1,
                 remainingSearches: USER.remainingSearches,
-                tickets: results
+                tickets: results,
+                message: "Ticket Search Successful"
               });
             });
 

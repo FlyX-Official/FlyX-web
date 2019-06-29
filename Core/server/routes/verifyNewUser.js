@@ -11,11 +11,11 @@ var db = admin.firestore();
  * @apiParam {String} uid             User's firebase AUTH user ID
  *
  * @apiSuccess {Object} data          Response data object
- * @apiSuccess {Number} data.code     Response code = 1
+ * @apiSuccess {string} data.code     Response code
  * @apiSuccess {String} data.message  Response message
  * 
  * @apiError {Object} data            Response data object
- * @apiError {Number} data.code       Response code = 0
+ * @apiError {string} data.code       Response code
  * @apiError {String} data.message    Response message
  * 
  */
@@ -33,10 +33,10 @@ router.post("/", function(req, res, next) {
     beta: true,
   }).then(response => {
     console.log(`User inserted into DB`);
-    res.send({code: 1, message: 'Inserted user into database'});
+    res.send({code: 'success', message: 'Inserted user into database'});
   }).catch((err) => {
     console.log(`Failed to create document: ${err}`);
-    res.send({code: 0, message: 'User already exists in database'});
+    res.send({code: 'failure', message: err});
   });
 
   // usersRef.set({
