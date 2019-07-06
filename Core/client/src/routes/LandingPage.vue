@@ -69,7 +69,18 @@
                   icon="envelope"
                 ></b-input>
               </b-field>
-              <b-field>
+              <b-field
+              :type="{ 'is-danger': isPasswordErr }"
+            :message="[
+                { 'Password must have at least 8 characters': minLengthErr },
+                { 'Password must have at most 50 characters': maxLengthErr },
+                { 'Password must contain uppercase letters': hasUppercaseErr },
+                { 'Password must contain lowercase letters': hasLowercaseErr },
+                { 'Password must contain digits': hasDigitsErr },
+                { 'Password must not contain spaces': noSpacesErr },
+                { 'Your password has been blacklisted': blacklistErr },
+            ]"
+              >
                 <b-input
                   type="password"
                   v-model="registerData.password"
@@ -79,7 +90,10 @@
                   password-reveal
                 ></b-input>
               </b-field>
-              <b-field>
+              <b-field
+              :type="{ 'is-danger': passwordsNoMatchErr}"
+              :message="{ 'Passwords do not match': passwordsNoMatchErr }"
+              >
                 <b-input
                   type="password"
                   v-model="registerData.confirmPassword"
@@ -93,9 +107,7 @@
                 <b-button
                   class="is-fullwidth is-secondary"
                   size="is-medium"
-                  icon-left="check"
                   native-type="submit"
-                  :loading="isRegisterLoading"
                 >Register</b-button>
               </b-field>
 
@@ -225,14 +237,35 @@ export default {
         email: "",
         password: ""
       },
-      isRegisterLoading: false,
-      isSignInLoading: false,
+      minLengthErr: false,
+      maxLengthErr: false,
+      hasUppercaseErr: false,
+      hasLowercaseErr: false,
+      hasDigitsErr: false,
+      noSpacesErr: false,
+      blacklistErr: false,
+      passwordsNoMatchErr: false,
+      schema: null,
+      isPasswordErr: false,
     };
   },
   mounted() {
-    // this.$root.$on('finishedRegister', () => {
-    //   this.$refs.tabbedModal.close();
-    // });
+    var passwordValidator = require('password-validator');
+
+    // Create a schema
+    this.schema = new passwordValidator();
+
+    // Add properties to it
+    this.schema
+    .is().min(8)                                    // Minimum length 8
+    .is().max(50)                                   // Maximum length 100
+    .has().uppercase()                              // Must have uppercase letters
+    .has().lowercase()                              // Must have lowercase letters
+    .has().digits()                                 // Must have digits
+    .has().not().spaces()                           // Should not have spaces
+    .is().not().oneOf(['Passw0rd','Password1','Password12', 'Password123', ]); // Blacklist these values
+
+  // console.log(this.schema.validate("Passw0rd", { list: true }));
   },
   methods: {
     openRegisterModal: function() {
@@ -244,11 +277,31 @@ export default {
     },
 
     submitRegister: function() {
-      this.$refs.tabbedModal.close();
-      // this.isRegisterLoading = true;
-      this.$store.dispatch("register", this.registerData);
-      this.registerData = {};
-      this.signInData = {};
+
+      // Get list of error that password triggers (validate password)
+      var errList = this.schema.validate(this.registerData.password, { list: true });
+
+      console.log(errList);
+
+      // if password & confirm password do not match
+      if (this.registerData.password != this.registerData.confirmPassword){
+        this.passwordsNoMatchErr = true;
+      }else{
+        this.passwordsNoMatchErr = false;
+      }
+
+      // if password contains no errors && confirmPassword matches
+      if (errList.length == 0 && !this.passwordsNoMatchErr){
+        this.resetPasswordErrors();
+        this.$refs.tabbedModal.close();
+        this.$store.dispatch("register", this.registerData);
+        this.registerData = {};
+        this.signInData = {};
+      }else{
+        this.isPasswordErr = true;
+        this.triggerPasswordErrors(errList);
+      }
+
     },
 
     submitSignIn: function() {
@@ -262,6 +315,61 @@ export default {
       this.$store.dispatch("signInWithSocial", social);
       this.registerData = {};
       this.signInData = {};
+    },
+    triggerPasswordErrors: function(errList) {
+      
+      if (errList.includes('min')){
+        this.minLengthErr = true;
+      }else{
+        this.minLengthErr = false;
+      }
+
+      if (errList.includes('max')){
+        this.maxLengthErr = true;
+      }else{
+        this.maxLengthErr = false;
+      }
+
+      if (errList.includes('uppercase')){
+        this.hasUppercaseErr = true;
+      }else{
+        this.hasUppercaseErr = false;
+      }
+
+      if (errList.includes('lowercase')){
+        this.hasLowercaseErr = true;
+      }else{
+        this.hasLowercaseErr = false;
+      }
+
+      if (errList.includes('digits')){
+        this.hasDigitsErr = true;
+      }else{
+        this.hasDigitsErr = false;
+      }
+
+      if (errList.includes('spaces')){
+        this.noSpacesErr = true;
+      }else{
+        this.noSpacesErr = false;
+      }
+
+      if (errList.includes('oneOf')){
+        this.blacklistErr = true;
+      }else{
+        this.blacklistErr = false;
+      }
+    },
+    resetPasswordErrors: function () {
+      this.minLengthErr= false;
+      this.maxLengthErr= false;
+      this.hasUppercaseErr= false;
+      this.hasLowercaseErr= false;
+      this.hasDigitsErr= false;
+      this.noSpacesErr= false;
+      this.blacklistErr= false;
+      this.passwordsNoMatchErr= false;
+      this.isPasswordErr= false;
     },
   }
 };

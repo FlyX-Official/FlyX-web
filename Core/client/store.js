@@ -6,6 +6,8 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import Api from "./src/services/Api";
 import { Snackbar } from "buefy/dist/components/snackbar";
+// import { LoadingProgrammatic as Loading} from "buefy/dist/components/loading";
+// import { Toast } from 'buefy/dist/components/toast'
 
 Vue.use(Vuex);
 
@@ -19,11 +21,15 @@ const vuexLocalStorage = new VuexPersist({
 
 export const store = new Vuex.Store({
   state: {
-    USER: null
+    USER: null,
+    registerTest: false
   },
   mutations: {
     initUser(state, firebaseUser) {
       state.USER = firebaseUser;
+    },
+    changeRegisterState(state, b) {
+      state.registerTest = b;
     }
   },
   getters: {
@@ -32,15 +38,30 @@ export const store = new Vuex.Store({
     },
     currUserID(state) {
       return state.USER.uid;
+    },
+    getRegisterState(state) {
+      return state.registerTest;
     }
   },
   actions: {
     // Sign in with email and password
     signIn(context, userInfo) {
+      //   this._vm.$toast.open({
+      //     duration: 3000,
+      //     message: `You have no remaining searches!`,
+      //     position: 'is-bottom',
+      //     type: 'is-danger'
+      // });
+
+      // Open Loading Spinner
+      const loadingComponent = this._vm.$loading.open();
+
       firebase
         .auth()
         .signInWithEmailAndPassword(userInfo.email, userInfo.password)
         .then(result => {
+          // Close Loading Spinner
+          loadingComponent.close();
 
           // If user email is verified, do post request to server to verify
           // they are in firestore DB
@@ -52,18 +73,24 @@ export const store = new Vuex.Store({
                 // alert(`[store.js] ${response.data.message}`);
               });
 
-          // if user email is NOT verified, alert them
+            // if user email is NOT verified, alert them
           } else {
-            Snackbar.open({
+            this._vm.$toast.open({
               message: "Please verify your email before signing in",
-              position: "is-top"
+              position: "is-top",
+              type: "is-danger"
             });
           }
-
         })
         .catch(error => {
+          // Close Loading Spinner
+          loadingComponent.close();
           // Error Handling
-          alert(error.message);
+          this._vm.$toast.open({
+            message: error.message,
+            position: "is-top",
+            type: "is-danger"
+          });
         });
     },
     // Sign in with provider
@@ -84,7 +111,6 @@ export const store = new Vuex.Store({
         .auth()
         .signInWithPopup(provider)
         .then(function(result) {
-
           // This gives you a Google Access Token. You can use it to access the Google API.
           // var token = result.credential.accessToken;
 
@@ -92,6 +118,7 @@ export const store = new Vuex.Store({
           Api()
             .post("/verifynewuser", { uid: result.user.uid })
             .then(response => {
+              //  alert(response.data.code + ': ' + response.data.message);
               // alert(`[store.js] ${response.data.message}`);
             });
         })
@@ -99,12 +126,8 @@ export const store = new Vuex.Store({
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
-          // The email of the user's account used.
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-          // ...
-          alert(error.message);
+          
+          // alert(errorMessage);
         });
     },
     // Sign out
@@ -114,16 +137,22 @@ export const store = new Vuex.Store({
         .signOut()
         .catch(error => {
           // Error Handling
-          alert(error.message);
+          this._vm.$toast.open({
+            message: error.message,
+            position: "is-top",
+            type: "is-danger"
+          });
         });
     },
     // Register with email and password
     register(context, userInfo) {
+      // Open Loading Spinner
+      const loadingComponent = this._vm.$loading.open();
+
       firebase
         .auth()
         .createUserWithEmailAndPassword(userInfo.email, userInfo.password)
         .then(result => {
-
           // Set user display name (in google auth)
           result.user
             .updateProfile({
@@ -133,30 +162,43 @@ export const store = new Vuex.Store({
               // Update successful.
             })
             .catch(function(error) {
+              // Close Loading Spinner
+              loadingComponent.close();
               // An error happened.
-              alert("updated user error");
+              alert(`updated user error: ${error}`);
             });
 
           // Send verification email to users email address
           result.user
             .sendEmailVerification()
             .then(function() {
-              
+              // Close Loading Spinner
+              loadingComponent.close();
+
               // Email sent.
               Snackbar.open({
-                message: "A verification email has been sent to you!",
+                message: "Verification email sent to your email address!",
                 position: "is-bottom-left"
               });
             })
             .catch(function(error) {
+              // Close Loading Spinner
+              loadingComponent.close();
               // An error happened.
-              alert("email verification error");
+              alert(`email verification error: ${error}`);
             });
-            
         })
         .catch(error => {
+          // Close Loading Spinner
+          loadingComponent.close();
+
+          this._vm.$toast.open({
+            message: error.message,
+            position: "is-top",
+            type: "is-danger"
+          });
           // Error Handling
-          alert(error.message);
+          // alert(error.message);
         });
     }
   },

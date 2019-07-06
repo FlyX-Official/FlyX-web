@@ -7,6 +7,55 @@
           <p id="one-way-btn" @click="setTripType('oneway')">One Way</p>
         </div>
         <form id="app-page-search-form" @submit.prevent="validateInput()">
+          <!-- <b-field >
+            <b-input  placeholder="From" icon="plane-departure"></b-input>
+            <b-input placeholder="To" icon="plane-arrival"></b-input>
+            <b-select placeholder="Radius">
+              <option>50 Miles</option>
+              <option>100 Miles</option>
+              <option>150 Miles</option>
+            </b-select>
+            <v-date-picker 
+              class="control"
+              mode="range"
+              name="date"
+              :available-dates="{ start: new Date(), end: new Date(), span: 280 }"
+              :disabledAttribute="disabledAttribute"
+              v-model="searchData.departureWindow"
+            >
+              <b-field slot-scope="props">
+                <b-input
+                  type="text"
+                  placeholder="Departure Window"
+                  :value="props.inputValue"
+                  
+                ></b-input>
+              </b-field>
+            </v-date-picker>
+
+             <v-date-picker 
+             id="return-datepicker"
+              class="control"
+              mode="range"
+              name="date"
+              :available-dates="{ start: new Date(), end: new Date(), span: 280 }"
+              :disabledAttribute="disabledAttribute"
+              v-model="searchData.returnDepartureWindow"
+            >
+              <b-field slot-scope="props">
+                <b-input
+                  type="text"
+                  placeholder="Departure Window"
+                  :value="props.inputValue"
+                  
+                ></b-input>
+              </b-field>
+            </v-date-picker> 
+
+            <p class="control">
+              <b-button icon-left="search" class="button is-secondary">Search</b-button>
+            </p>
+          </b-field>-->
           <autocomplete v-model="searchData.from" id="from-input" placeholder="From"></autocomplete>
           <autocomplete v-model="searchData.to" id="to-input" placeholder="To"></autocomplete>
           <v-date-picker
@@ -42,8 +91,8 @@
           <p>{{currUserDisplayName}}</p>
         </div>
         <div @click="openProfileModal()" id="nav-profile-picture">
-          <img v-if="currUser.photoURL == null" src="../assets/user-circle.svg" alt>
-          <img v-else v-bind:src="currUserPhotoURL" alt>
+          <img v-if="currUser.photoURL == null" src="../assets/user-circle.svg" alt />
+          <img v-else v-bind:src="currUserPhotoURL" alt />
         </div>
       </div>
     </div>
@@ -84,7 +133,7 @@
 
     <div id="app-tickets-wrap">
       <!--<p id='presearch-message' v-if='dispMessage'>Enter in your trip info to find tickets!</p>-->
-      <img id="presearch-message" v-if="dispMessage" src="../assets/logo-light.svg">
+      <img id="presearch-message" v-if="dispMessage" src="../assets/logo-light.svg" />
       <div id="search-spinner" v-if="dispSpinner"></div>
       <div v-if="isSortPrice">
         <ticket
@@ -126,14 +175,20 @@
                 </p>
               </div>
               <div class="leg-top leg-row">
-                <img src="../assets/plane-departure.svg" alt>
+                <img src="../assets/plane-departure.svg" alt />
                 <p class="leg-time">{{converTime(leg.dTimeUTC)}}</p>
-                <p class="leg-airport"><span class="leg-airport-code">{{leg.flyFrom}}</span> - {{leg.cityFrom}}</p>
+                <p class="leg-airport">
+                  <span class="leg-airport-code">{{leg.flyFrom}}</span>
+                  - {{leg.cityFrom}}
+                </p>
               </div>
               <div class="leg-mid leg-row">
-                <img src="../assets/plane-arrival.svg" alt>
+                <img src="../assets/plane-arrival.svg" alt />
                 <p class="leg-time">{{converTime(leg.aTimeUTC)}}</p>
-                <p class="leg-airport"><span class="leg-airport-code">{{leg.flyTo}}</span> - {{leg.cityTo}}</p>
+                <p class="leg-airport">
+                  <span class="leg-airport-code">{{leg.flyTo}}</span>
+                  - {{leg.cityTo}}
+                </p>
               </div>
               <div class="leg-bot leg-row">
                 <div>
@@ -149,7 +204,7 @@
             </div>
             <div v-if="ticketDetailsData.route[i+1]" class="layover">
               <div class="layover-clock-wrap">
-                <img class="layover-clock-img" src="../assets/clock.svg">
+                <img class="layover-clock-img" src="../assets/clock.svg" />
               </div>
               <div class="layover-text-wrap">
                 <p>{{determineLayoverTime(leg, ticketDetailsData.route[i+1])}}</p>
@@ -161,8 +216,8 @@
       <div id="details-buy-btn-wrap">
         <div v-if="ticketDetailsData" id="ticket-buy-btn-trip-brief">
           <p>{{ticketDetailsData.flyFrom}}</p>
-          <img v-if="selectedTicketOneWay" style="width: 15px;" src="../assets/one-way-white.svg">
-          <img v-else src="../assets/round-trip-white.svg">
+          <img v-if="selectedTicketOneWay" style="width: 15px;" src="../assets/one-way-white.svg" />
+          <img v-else src="../assets/round-trip-white.svg" />
           <p>{{ticketDetailsData.flyTo}}</p>
         </div>
 
@@ -193,6 +248,7 @@ import Map from "@/components/Map"; */
 import Api from "@/services/Api";
 import autocomplete from "@/components/Autocomplete";
 import ticket from "@/components/Ticket";
+import debounce from 'debounce'
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
 import firebase, { functions } from "firebase/app";
 import "firebase/auth";
@@ -243,7 +299,11 @@ export default {
       dispSpinner: false,
       ticketDetailsData: "",
       selectedTicketOneWay: Boolean,
-      isOutOfSearches: false
+      isOutOfSearches: false,
+      selectedDate: new Date(2018, 0, 10),
+      data: [],
+                selected: null,
+                isFetching: false
     };
   },
   computed: {
@@ -268,6 +328,18 @@ export default {
     currUser() {
       return this.$store.state.USER;
     },
+    inputState() {
+      // if (!this.selectedValue) {
+      //   return {
+      //     type: "is-danger",
+      //     message: "Date required."
+      //   };
+      // }
+      return {
+        type: "is-primary",
+        message: ""
+      };
+    }
   },
   mounted() {
     var roundBtn = document.getElementById("round-trip-btn");
@@ -293,7 +365,7 @@ export default {
     validateInput: function() {
       if (this.searchData.from == "" || this.searchData.to == "") {
         alert("Please fill out all fields");
-      }else if(!this.$store.state.USER.emailVerified){
+      } else if (!this.$store.state.USER.emailVerified) {
         alert("Please verify your email before searching");
       } else {
         this.ticketsByPrice = [];
@@ -315,7 +387,7 @@ export default {
           this.isLoading(false);
 
           if (response.data.code == 1) {
-            let tickets = response.data.tickets.data
+            let tickets = response.data.tickets.data;
 
             this.ticketsByPrice = [];
             this.ticketsByDuration = [];
@@ -330,13 +402,17 @@ export default {
             this.ticketsByDate.sort(this.compareDate);
 
             this.isSortPrice = true;
-
           } else if (response.data.code == 0) {
             this.isOutOfSearches = true;
-            alert('out of searches');
+            this.$toast.open({
+              duration: 3000,
+              message: `You have no remaining searches!`,
+              position: "is-bottom",
+              type: "is-danger"
+            });
           } else {
             // ***** NEED ERROR HANDLING *******
-            console.log('Something went wrong with the search');
+            console.log("Something went wrong with the search");
           }
         })
         .catch(error => {
@@ -472,7 +548,7 @@ export default {
     onlyAirportCode: function(str) {
       var parts = str.split(",");
       return parts[0];
-    }
+    },
   }
 };
 </script>
