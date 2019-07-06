@@ -19,6 +19,7 @@ export default {
       if (user) {
         // if user has verified email
         if (user.emailVerified) {
+
           // redirect to app page and commit user to store
           this.$store.commit("initUser", user);
           this.$router.push("/app");
@@ -26,6 +27,7 @@ export default {
 
         // if user has NOT verified email
         } else {
+          
           // log them out
           firebase
             .auth()
@@ -63,8 +65,8 @@ $primary-invert: findColorInvert($primary);
 $secondary: #2ED199;
 $secondary-invert: findColorInvert($secondary);
 
-$twitter: #4099FF;
-$twitter-invert: findColorInvert($twitter);
+$danger: #FF6B6B;
+$danger-invert: findColorInvert($danger);
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
@@ -78,7 +80,6 @@ $colors: (
     "success": ($success, $success-invert),
     "warning": ($warning, $warning-invert),
     "danger": ($danger, $danger-invert),
-    "twitter": ($twitter, $twitter-invert)
 );
 
 

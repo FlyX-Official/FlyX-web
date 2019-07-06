@@ -27,7 +27,7 @@ router.post("/", function(req, res, next) {
   usersRef.create({
     uid: uid,
     accessTier: 0,
-    remainingSearches: 30,
+    remainingSearches: 20,
     totalSearches: 0,
     admin: false,
     beta: true,
@@ -36,7 +36,7 @@ router.post("/", function(req, res, next) {
     res.send({code: 'success', message: 'Inserted user into database'});
   }).catch((err) => {
     console.log(`Failed to create document: ${err}`);
-    res.send({code: 'failure', message: err});
+    res.send({code: 'failure', message: 'Cannot insert user into database'});
   });
 
   // usersRef.set({

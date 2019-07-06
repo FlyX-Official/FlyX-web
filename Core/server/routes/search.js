@@ -102,8 +102,8 @@ router.post("/", function(req, res, next) {
 
         // if user exists, grab user data
       } else {
-        USER = doc.data();
-
+        const USER = doc.data();
+        
         // if user has remaining searches, do search and respond with tickets
         if (USER.remainingSearches > 0 || USER.admin) {
           ticketSearch
@@ -122,9 +122,11 @@ router.post("/", function(req, res, next) {
               // if not admin...
               if (!USER.admin) {
                 // decrement remaining searches
-                USER.remainingSearches--;
+                var decrementSearches = USER.remainingSearches;
+                decrementSearches--;
+
                 // Update user data in firestore
-                usersRef.update({ remainingSearches: USER.remainingSearches });
+                usersRef.update({ remainingSearches: decrementSearches });
               }
 
               // send response with tickets
