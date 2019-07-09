@@ -1,5 +1,6 @@
 <template>
   <div id="app-page-container">
+    <!-- Nav Bar -->
     <div id="app-nav">
       <div id="search-bar-wrap">
         <div id="trip-selection">
@@ -80,22 +81,29 @@
             v-model="searchData.returnDepartureWindow"
             show-caps
           ></v-date-picker>
-          <button id="nav-search-submit-btn" type="submit">
+          <button :disabled="dispSpinner" id="nav-search-submit-btn" type="submit">
             <span id="submit-svg"></span>
           </button>
         </form>
       </div>
 
       <div id="nav-profile-wrap">
-        <div @click="openProfileModal()" id="nav-username-wrap">
+        <div id="menu-icon" @click="openProfileModal()">
+          <b-icon icon="user-circle" size="is-large" type="is-white"></b-icon>
+        </div>
+
+        <!-- <div @click="openProfileModal()" id="nav-username-wrap">
           <p>{{currUserDisplayName}}</p>
         </div>
         <div @click="openProfileModal()" id="nav-profile-picture">
           <img v-if="currUser.photoURL == null" src="../assets/user-circle.svg" alt />
           <img v-else v-bind:src="currUserPhotoURL" alt />
-        </div>
+        </div>-->
       </div>
     </div>
+    <!-- /Nav Bar -->
+
+    <!-- App Sort Bar -->
     <div id="app-sort-wrap">
       <div id="main-sorts-wrap">
         <div class="main-sort" @click="chooseMainSort('price')" id="sort-by-price">
@@ -130,7 +138,9 @@
       <div id="sort-depart-airports"></div>
       <div id="sort-arrive-airports"></div>
     </div>
+    <!-- /App Sort Bar -->
 
+    <!-- App Tickets Container -->
     <div id="app-tickets-wrap">
       <!--<p id='presearch-message' v-if='dispMessage'>Enter in your trip info to find tickets!</p>-->
       <img id="presearch-message" v-if="dispMessage" src="../assets/logo-light.svg" />
@@ -160,6 +170,7 @@
         ></ticket>
       </div>
     </div>
+    <!-- /App Tickets Container -->
 
     <div id="app-ticket-details-wrap">
       <div id="details-text-wrap">
@@ -233,9 +244,35 @@
       </div>
     </div>
 
-    <sweet-modal ref="profileModal" overlay-theme="dark" :title="currUserDisplayName">
-      <button @click="signOut()">Sign out</button>
+    <!-- Profile Modal -->
+    <sweet-modal ref="profileModal" overlay-theme="dark" width="400px" :title="currUserDisplayName">
+      <b-taglist attached>
+        <b-tag size="is-large" type="is-primary">Member Tier</b-tag>
+        <b-tag size="is-large" type="is-warning">
+          <span style="margin: 0 10px;"><b-icon icon="flask" size="is-small"></b-icon></span><span style="margin-left: 5px;">Beta</span>
+        </b-tag>
+      </b-taglist>
+      <b-taglist attached>
+        <b-tag size="is-large" type="is-primary">Remaining Searches</b-tag>
+        <b-tag size="is-large" type="is-accent">23</b-tag>
+      </b-taglist>
+      <b-field>
+        <b-button class="is-fullwidth is-secondary" size="is-medium">Upgrade</b-button>
+      </b-field>
+      <b-field>
+        <b-button @click="signOut()" class="is-fullwidth is-danger" size="is-medium">Sign Out</b-button>
+      </b-field>
+      <hr style="border-top: 1px solid #979797" />
+      <b-field>
+        <b-input type="textarea" minlength="25" placeholder="What's wrong with our website?"></b-input>
+      </b-field>
+      <b-field>
+        <b-button class="is-fullwidth is-accent" size="is-medium">Send Feedback</b-button>
+      </b-field>
+
+      <!-- <button @click="signOut()">Sign out</button> -->
     </sweet-modal>
+    <!-- /Profile Modal -->
   </div>
 </template>
 
@@ -248,7 +285,7 @@ import Map from "@/components/Map"; */
 import Api from "@/services/Api";
 import autocomplete from "@/components/Autocomplete";
 import ticket from "@/components/Ticket";
-import debounce from 'debounce'
+import debounce from "debounce";
 import { SweetModal, SweetModalTab } from "sweet-modal-vue";
 import firebase, { functions } from "firebase/app";
 import "firebase/auth";
@@ -300,10 +337,7 @@ export default {
       ticketDetailsData: "",
       selectedTicketOneWay: Boolean,
       isOutOfSearches: false,
-      selectedDate: new Date(2018, 0, 10),
-      data: [],
-                selected: null,
-                isFetching: false
+      selectedDate: new Date(2018, 0, 10)
     };
   },
   computed: {
@@ -548,7 +582,7 @@ export default {
     onlyAirportCode: function(str) {
       var parts = str.split(",");
       return parts[0];
-    },
+    }
   }
 };
 </script>
