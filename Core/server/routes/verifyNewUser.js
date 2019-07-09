@@ -29,7 +29,7 @@ router.post("/", function(req, res, next) {
     accessTier: 0,
     remainingSearches: 20,
     totalSearches: 0,
-    admin: false,
+    VIP: false,
     beta: true,
   }).then(response => {
     console.log(`User inserted into DB`);

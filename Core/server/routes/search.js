@@ -105,7 +105,7 @@ router.post("/", function(req, res, next) {
         const USER = doc.data();
         
         // if user has remaining searches, do search and respond with tickets
-        if (USER.remainingSearches > 0 || USER.admin) {
+        if (USER.remainingSearches > 0 || USER.VIP) {
           ticketSearch
             .radiusSearch(
               TICKET_LIMIT,
@@ -119,8 +119,8 @@ router.post("/", function(req, res, next) {
             )
             .then(results => {
 
-              // if not admin...
-              if (!USER.admin) {
+              // if not VIP...
+              if (!USER.VIP) {
                 // decrement remaining searches
                 var decrementSearches = USER.remainingSearches;
                 decrementSearches--;
@@ -146,7 +146,6 @@ router.post("/", function(req, res, next) {
     })
     // any firebase error, respond with error code
     .catch(err => {
-      console.log("error");
       res.send({ code: -1, message: "Error fetching document" });
     });
 });
