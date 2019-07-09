@@ -256,18 +256,27 @@
         <b-tag size="is-large" type="is-primary">Remaining Searches</b-tag>
         <b-tag size="is-large" type="is-accent">23</b-tag>
       </b-taglist>
+      <hr style="border-top: 1px solid #979797" />
       <b-field>
-        <b-button class="is-fullwidth is-secondary" size="is-medium">Upgrade</b-button>
+            <b-input expanded placeholder="Promo Code"
+                icon="key">
+            </b-input>
+            <p class="control">
+                <b-button class="button is-secondary">Submit</b-button>
+            </p>
+        </b-field>
+      <b-field>
+        <b-button class="is-fullwidth is-secondary" >Upgrade</b-button>
       </b-field>
       <b-field>
-        <b-button @click="signOut()" class="is-fullwidth is-danger" size="is-medium">Sign Out</b-button>
+        <b-button @click="signOut()" class="is-fullwidth is-danger">Sign Out</b-button>
       </b-field>
       <hr style="border-top: 1px solid #979797" />
       <b-field>
         <b-input type="textarea" minlength="25" placeholder="What's wrong with our website?"></b-input>
       </b-field>
       <b-field>
-        <b-button class="is-fullwidth is-accent" size="is-medium">Send Feedback</b-button>
+        <b-button class="is-fullwidth is-accent">Send Feedback</b-button>
       </b-field>
 
       <!-- <button @click="signOut()">Sign out</button> -->
