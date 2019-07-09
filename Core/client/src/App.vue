@@ -65,11 +65,18 @@ $primary-invert: findColorInvert($primary);
 $secondary: #2ED199;
 $secondary-invert: findColorInvert($secondary);
 
+$dark: #4A4A4A;
+$dark-invert: findColorInvert($dark);
+
+$accent: #22B4DE;
+$accent-invert: findColorInvert($accent);
+
 $danger: #FF6B6B;
 $danger-invert: findColorInvert($danger);
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
+    "accent": ($accent, $accent-invert),
     "white": ($white, $black),
     "black": ($black, $white),
     "light": ($light, $light-invert),

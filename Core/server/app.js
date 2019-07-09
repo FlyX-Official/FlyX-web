@@ -1,13 +1,9 @@
+require('dotenv').config()
 const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
-
-const admin = require("firebase-admin");
-var serviceAccount = require("./fb-key.json"); 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+require('./services/FB_connection');
 
 // routes
 var indexRouter = require("./routes/index");
@@ -15,8 +11,8 @@ var searchRouter = require("./routes/search");
 var notFoundRouter = require("./routes/notFound");
 var autocompleteRouter = require("./routes/autocomplete");
 var priceTickerRouter = require("./routes/priceTicker");
-var authentication = require("./routes/authentication");
 var verifyNewUser = require("./routes/verifyNewUser");
+var remainingSearches = require("./routes/remainingSearches");
 
 var app = express();
 
@@ -31,72 +27,8 @@ app.use("/", indexRouter);
 app.use("/search", searchRouter);
 app.use("/autocomplete", autocompleteRouter);
 app.use("/priceticker", priceTickerRouter);
-app.use("/authentication", authentication);
 app.use("/verifynewuser", verifyNewUser);
+app.use("/remainingsearches", remainingSearches);
 app.use("*", notFoundRouter);
 
 module.exports = app;
-/*
-
-// SESSION CODE_____
-
-const ref = firebase.initializeApp({
-    credentail: firebase.credential.cert('./firebaseConfig'),
-    databaseURL : 'FIXME DATABASEURL!!!'
-});
-
-const {
-    NODE_ENV = 'development',
-    SESSION_NAME = 'sid',
-    SESSION_SECRET = 'THIS WILL PROBABLY NEED TO BE CHANGED!'
-    } = process.env
-
-const IN_PROD = NODE_ENV === 'production'
-
-app.use(sesson({
-    store: new FirebaseStore({
-    database : ref.database()
-    }),
-
-    name : SESSION_NAME,
-    resave : false,
-    saveUninitialized : false,
-    secret : SESSION_SECRET,
-    cookie: {
-    sameSite: true,
-    secure: IN_PROD
-    }
-}))
-
-const redirectLogin = (req, res, next) => {
-    if(!req.session.userId)
-    {
-        res.redirect('/login')
-    }
-}
-
-app.get('/api/login', ()=> {
-
-  //${userId ? {}}
-
-})
-
-app.get('/search', redirectLogin, (req, res) =>{
-
-
-})
-
-app.post('/login', () => {
-    //Redirect to the correct area after authentication
-})
-
-app.post('/register', (req, res) =>{
-    res.send({
-    message: `Hello ${req.body.email}! User Registered!`
-    })
-
-    
-})
-
-  // END SESSION CODE
-*/

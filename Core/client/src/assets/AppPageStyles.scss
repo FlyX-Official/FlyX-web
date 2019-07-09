@@ -107,6 +107,10 @@
           &:active {
             background-color: $PrimaryGreen;
           }
+          &:disabled{
+            background-color: #dddddd;
+            cursor: wait;
+          }
         }
         #submit-svg {
           background: url("../assets/search-solid.svg") no-repeat top left;
@@ -123,31 +127,10 @@
       align-items: center;
       flex-direction: row;
       grid-area: profile;
+      padding-right: 20px;
 
-      #nav-username-wrap {
-        color: $FontLight;
-        user-select: none;
+      #menu-icon{
         cursor: pointer;
-        p {
-          font-size: 25px;
-          font-weight: 100;
-        }
-      }
-      #nav-profile-picture {
-        // border: 2px solid #fff;
-        background-color: #fff;
-        width: 55px;
-        height: 55px;
-        border-radius: 100%;
-        margin: 0 20px;
-        cursor: pointer;
-
-        img {
-          border-radius: 100%;
-          object-fit: fill;
-          border: 2px solid #fff;
-
-        }
       }
     }
   }
