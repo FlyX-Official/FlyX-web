@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "apidoc": {
     "title": "Flyx API",
-    "url" : "http://flyx-server.herokuapp.com"
+    "url": "http://flyx-server.herokuapp.com"
   },
   "private": true,
   "scripts": {
@@ -15,6 +15,7 @@
     "cors": "^2.8.4",
     "cron": "^1.7.1",
     "debug": "~2.6.9",
+    "dotenv": "^8.0.0",
     "elasticsearch": "^15.5.0",
     "express": "^4.17.1",
     "firebase-admin": "^8.2.0",

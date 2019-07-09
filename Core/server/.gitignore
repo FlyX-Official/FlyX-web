@@ -6,6 +6,7 @@ node_modules
 .env.local
 .env.*.local
 fb-key.json
+.env
 
 # Log files
 npm-debug.log*
