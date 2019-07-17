@@ -51,6 +51,9 @@ export default {
 };
 </script>
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,600,700');
 @import "~bulma/sass/utilities/_all";
 
 // Set your colors

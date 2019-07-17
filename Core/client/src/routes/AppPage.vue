@@ -146,7 +146,7 @@
     <!-- App Tickets Container -->
     <div id="app-tickets-wrap">
       <!--<p id='presearch-message' v-if='dispMessage'>Enter in your trip info to find tickets!</p>-->
-      <img id="presearch-message" v-if="dispMessage" src="../assets/logo-light.svg" />
+      <img id="presearch-message" v-if="dispMessage" src="" alt="logo needed" />
       <div id="search-spinner" v-if="dispSpinner"></div>
       <div v-if="isSortPrice">
         <ticket

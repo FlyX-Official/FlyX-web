@@ -2,15 +2,21 @@
   <div id="page-container">
     <div class="nav">
       <div id="logo-wrap">
-        <a href="/">
-          <h1 id="logo">FlyX</h1>
-          <!-- <img src="@/assets/logo-hexagon.svg" alt=""> -->
-        </a>
+          <!-- <h1 id="logo">FlyX</h1> -->
+          <a href="/"><img id="logo" src="@/assets/logo1-opt.png" alt=""></a>
       </div>
       <div id="nav-link-wrap">
-        <h2>How It Works</h2>
-        <h2>Get Started</h2>
-        <h2 @click="openSignInModal()">Sign In</h2>
+        <h2 id="how-it-works-link">How It Works</h2>
+        <h2 id="pricing-link">Pricing</h2>
+        <!-- <h2 @click="openSignInModal()">Sign In</h2> -->
+        <b-field>
+              <b-button
+              id="sign-in-btn"
+                class="is-secondary"
+                size="is-medium"
+                @click="openSignInModal()"
+              >Sign in</b-button>
+            </b-field>
       </div>
     </div>
     <div class="top-grid-container">
@@ -20,7 +26,7 @@
         <h1>One Click.</h1>
       </div>
       <div class="phone-graphic-right">
-        <img src="@/assets/phone_radius_search.svg" alt="not working" />
+        <img src="@/assets/phones.png" alt="not working" />
       </div>
       <div class="beta-mid">
         <div id="beta-btn" @click="openRegisterModal()">
