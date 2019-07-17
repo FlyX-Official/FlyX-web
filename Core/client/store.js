@@ -15,21 +15,32 @@ const vuexLocalStorage = new VuexPersist({
   storage: window.localStorage, // or window.sessionStorage or localForage instance.
   // Function that passes the state and returns the state with only the objects you want to store.
   reducer: state => ({
-    USER: state.USER
+    USER: state.USER,
+    remainingSearches: state.remainingSearches,
+    isVIP: state.isVIP,
+    isBeta: state.isBeta
   })
 });
 
 export const store = new Vuex.Store({
   state: {
     USER: null,
-    registerTest: false
+    remainingSearches: null,
+    isVIP: null,
+    isBeta: null
   },
   mutations: {
     initUser(state, firebaseUser) {
       state.USER = firebaseUser;
     },
-    changeRegisterState(state, b) {
-      state.registerTest = b;
+    setRemainingSearches(state, n) {
+      state.remainingSearches = n;
+    },
+    setVIP(state, v) {
+      state.isVIP = v;
+    },
+    setBeta(state, b) {
+      state.isBeta = b;
     }
   },
   getters: {
@@ -39,8 +50,14 @@ export const store = new Vuex.Store({
     currUserID(state) {
       return state.USER.uid;
     },
-    getRegisterState(state) {
-      return state.registerTest;
+    currUserRemainingSearches(state) {
+      return state.remainingSearches;
+    },
+    currUserIsVIP(state) {
+      return state.isVIP;
+    },
+    currUserIsBeta(state) {
+      return state.isBeta;
     }
   },
   actions: {
@@ -71,6 +88,18 @@ export const store = new Vuex.Store({
               .post("/verifynewuser", { uid: result.user.uid })
               .then(response => {
                 // alert(`[store.js] ${response.data.message}`);
+
+                // Get user data from server
+                Api()
+                  .post("/remainingsearches", { uid: result.user.uid })
+                  .then(response => {
+                    context.commit(
+                      "setRemainingSearches",
+                      response.data.remainingSearches
+                    );
+                    context.commit("setVIP", response.data.isVIP);
+                    context.commit("setBeta", response.data.isBeta);
+                  });
               });
 
             // if user email is NOT verified, alert them
@@ -120,13 +149,25 @@ export const store = new Vuex.Store({
             .then(response => {
               //  alert(response.data.code + ': ' + response.data.message);
               // alert(`[store.js] ${response.data.message}`);
+
+              // Get user data from server
+              Api()
+                .post("/remainingsearches", { uid: result.user.uid })
+                .then(response => {
+                  context.commit(
+                    "setRemainingSearches",
+                    response.data.remainingSearches
+                  );
+                  context.commit("setVIP", response.data.isVIP);
+                  context.commit("setBeta", response.data.isBeta);
+                });
             });
         })
         .catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
-          
+
           // alert(errorMessage);
         });
     },
@@ -200,7 +241,30 @@ export const store = new Vuex.Store({
           // Error Handling
           // alert(error.message);
         });
-    }
+    },
+    resetPassword(context, emailAddr){
+      // Open Loading Spinner
+      const loadingComponent = this._vm.$loading.open();
+
+      firebase
+      .auth()
+      .sendPasswordResetEmail(emailAddr)
+      .then(function() {
+        // Close Loading Spinner
+        loadingComponent.close();
+
+        // Email sent.
+        Snackbar.open({
+          message: "Password reset email sent to specifed email address",
+          position: "is-bottom-left"
+        });
+      }).catch(function(error) {
+        // Close Loading Spinner
+        loadingComponent.close();
+        // An error happened.
+        alert(`email verification error: ${error}`);
+      });
+    },
   },
   plugins: [vuexLocalStorage.plugin]
 });
