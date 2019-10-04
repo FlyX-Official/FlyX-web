@@ -59,12 +59,14 @@
           </b-field>-->
           <autocomplete v-model="searchData.from" id="from-input" placeholder="From"></autocomplete>
           <autocomplete v-model="searchData.to" id="to-input" placeholder="To"></autocomplete>
+
           <v-date-picker
             class="datepicker"
             id="start-datepicker"
             :pane-width="150"
             name="date"
             mode="range"
+            :input-props='{placeholder: "Departure Window", readonly: true}'
             :available-dates="{ start: new Date(), end: new Date(), span: 280 }"
             :disabledAttribute="disabledAttribute"
             v-model="searchData.departureWindow"
@@ -74,6 +76,7 @@
             class="datepicker"
             id="return-datepicker"
             :pane-width="150"
+            :input-props='{placeholder: "Return Departure Window",readonly: true}'
             name="date"
             mode="range"
             :available-dates="{ start: new Date(), end: new Date(), span: 280 }"
@@ -143,7 +146,7 @@
     <!-- App Tickets Container -->
     <div id="app-tickets-wrap">
       <!--<p id='presearch-message' v-if='dispMessage'>Enter in your trip info to find tickets!</p>-->
-      <img id="presearch-message" v-if="dispMessage" src="../assets/logo-light.svg" />
+      <img id="presearch-message" v-if="dispMessage" src="" alt="logo needed" />
       <div id="search-spinner" v-if="dispSpinner"></div>
       <div v-if="isSortPrice">
         <ticket
@@ -248,13 +251,27 @@
     <sweet-modal ref="profileModal" overlay-theme="dark" width="400px" :title="currUserDisplayName">
       <b-taglist attached>
         <b-tag size="is-large" type="is-primary">Member Tier</b-tag>
-        <b-tag size="is-large" type="is-warning">
+
+        <!-- If user is VIP -->
+        <b-tag v-if="currUserIsVIP" size="is-large" type="is-warning">
+          <span style="margin: 0 10px;"><b-icon icon="heart" size="is-small"></b-icon></span><span style="margin-left: 5px;">VIP</span>
+        </b-tag>
+
+        <!-- Else If user is Beta -->
+        <b-tag v-else-if="currUserIsBeta" size="is-large" type="is-warning">
           <span style="margin: 0 10px;"><b-icon icon="flask" size="is-small"></b-icon></span><span style="margin-left: 5px;">Beta</span>
         </b-tag>
+
+        <!-- Else -->
+        <b-tag v-else size="is-large" type="is-warning">
+          <span style="margin: 0 10px;"><b-icon icon="award" size="is-small"></b-icon></span><span style="margin-left: 5px;">Gold</span>
+        </b-tag>
+
       </b-taglist>
       <b-taglist attached>
         <b-tag size="is-large" type="is-primary">Remaining Searches</b-tag>
-        <b-tag size="is-large" type="is-accent">23</b-tag>
+        <b-tag v-if="currUserIsVIP" size="is-large" type="is-accent"><b-icon style="margin: 0 5px;" icon="infinity" size="is-small"></b-icon></b-tag>
+        <b-tag v-else size="is-large" type="is-accent">{{currUserRemainingSearches}}</b-tag>
       </b-taglist>
       <hr style="border-top: 1px solid #979797" />
       <b-field>
@@ -266,7 +283,7 @@
             </p>
         </b-field>
       <b-field>
-        <b-button class="is-fullwidth is-secondary" >Upgrade</b-button>
+        <b-button disabled class="is-fullwidth is-secondary" >Upgrade Plan (coming soon)</b-button>
       </b-field>
       <b-field>
         <b-button @click="signOut()" class="is-fullwidth is-danger">Sign Out</b-button>
@@ -321,12 +338,12 @@ export default {
         radiusFrom: "100",
         radiusTo: "100",
         departureWindow: {
-          start: new Date(new Date().getTime() + 86400000),
-          end: new Date(new Date().getTime() + 86400000 * 7)
+          start: null/*new Date(new Date().getTime() + 86400000)*/,
+          end: null/*new Date(new Date().getTime() + 86400000 * 7)*/,
         },
         returnDepartureWindow: {
-          start: new Date(new Date().getTime() + 86400000 * 9),
-          end: new Date(new Date().getTime() + 86400000 * 16)
+          start: null/*new Date(new Date().getTime() + 86400000 * 9)*/,
+          end: null/*new Date(new Date().getTime() + 86400000 * 16)*/,
         }
       },
       //works like css, for what is disabled we can choose the style to give the content
@@ -371,18 +388,15 @@ export default {
     currUser() {
       return this.$store.state.USER;
     },
-    inputState() {
-      // if (!this.selectedValue) {
-      //   return {
-      //     type: "is-danger",
-      //     message: "Date required."
-      //   };
-      // }
-      return {
-        type: "is-primary",
-        message: ""
-      };
-    }
+    currUserRemainingSearches() {
+      return this.$store.getters.currUserRemainingSearches;
+    },
+    currUserIsVIP() {
+      return this.$store.getters.currUserIsVIP;
+    },
+    currUserIsBeta() {
+      return this.$store.getters.currUserIsBeta;
+    },
   },
   mounted() {
     var roundBtn = document.getElementById("round-trip-btn");
@@ -431,6 +445,8 @@ export default {
 
           if (response.data.code == 1) {
             let tickets = response.data.tickets.data;
+            let remainingSearches = response.data.remainingSearches;
+            this.$store.commit("setRemainingSearches", remainingSearches);
 
             this.ticketsByPrice = [];
             this.ticketsByDuration = [];

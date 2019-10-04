@@ -12,20 +12,20 @@ const TICKET_LIMIT = 100;
  * @apiName SearchTickets
  * @apiGroup Search
  *
- * @apiParam {Object} body  
+ * @apiParam {Object} body
  * @apiParam {String} body.uid                                  Firebase Auth User ID
  * @apiParam {Boolean} body.oneWay                              Boolean Representing One Way/Round Trip
  * @apiParam {String} body.from                                 Airport IATA Code
  * @apiParam {String} body.to                                   Airport IATA Code
  * @apiParam {String} body.radiusFrom                           Radius around departure airport
  * @apiParam {String} body.radiusTo                             Radius around arrival airport
- * @apiParam {Object} body.departureWindow                      
+ * @apiParam {Object} body.departureWindow
  * @apiParam {Date} body.departureWindow.start              Start of departure window
  * @apiParam {Date} body.departureWindow.end                End of depparture window
- * @apiParam {Object} body.returnDepartureWindow    
+ * @apiParam {Object} body.returnDepartureWindow
  * @apiParam {Date} body.returnDepartureWindow.start        Start of return departure window
  * @apiParam {Date} body.returnDepartureWindow.end          End of return departure window
- * 
+ *
  * @apiParamExample {json} Request-Structure-Example:
  *     searchData: {
  *       uid: "abc123def456ghi789jkl",
@@ -42,17 +42,17 @@ const TICKET_LIMIT = 100;
  *         start: new Date(),
  *         end: new Date()
  *       }
- *     }            
+ *     }
  *
  * @apiSuccess {Number} code                  Response code
  * @apiSuccess {String} message               Response message
  * @apiSuccess {Object} [tickets]               Tickets Object
  * @apiSuccess {Array} [tickets.data]           Array of tickets in tickets object
  * @apiSuccess {Number} remainingSearches     User's remaining searches
- * 
+ *
  * @apiError {string} code            Response code
  * @apiError {String} message         Response message
- * 
+ *
  */
 
 router.post("/", function(req, res, next) {
@@ -103,7 +103,7 @@ router.post("/", function(req, res, next) {
         // if user exists, grab user data
       } else {
         const USER = doc.data();
-        
+
         // if user has remaining searches, do search and respond with tickets
         if (USER.remainingSearches > 0 || USER.VIP) {
           ticketSearch
@@ -118,24 +118,33 @@ router.post("/", function(req, res, next) {
               userInput.returnDepartureWindow
             )
             .then(results => {
+              // if VIP...
+              if (USER.VIP) {
+                // send response with tickets & do not decrement remainingSearches
+                res.send({
+                  code: 1,
+                  remainingSearches: USER.remainingSearches,
+                  tickets: results,
+                  message: "Ticket Search Successful"
+                });
 
-              // if not VIP...
-              if (!USER.VIP) {
+                // if not VIP...
+              } else {
                 // decrement remaining searches
                 var decrementSearches = USER.remainingSearches;
                 decrementSearches--;
 
                 // Update user data in firestore
                 usersRef.update({ remainingSearches: decrementSearches });
-              }
 
-              // send response with tickets
-              res.send({
-                code: 1,
-                remainingSearches: USER.remainingSearches,
-                tickets: results,
-                message: "Ticket Search Successful"
-              });
+                // send response with tickets
+                res.send({
+                  code: 1,
+                  remainingSearches: decrementSearches,
+                  tickets: results,
+                  message: "Ticket Search Successful"
+                });
+              }
             });
 
           // if user does not have any remaining searches, do not do search

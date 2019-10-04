@@ -74,7 +74,7 @@
             border: none;
             box-sizing: border-box;
             vertical-align: middle;
-            font-size: 15px;
+            font-size: 13px;
             padding-left: 7px;
           }
         }
@@ -82,12 +82,12 @@
           input {
             width: 185px;
             height: 40px;
-            text-align: center;
             margin: 0.5px;
             border: none;
             box-sizing: border-box;
             vertical-align: middle;
-            font-size: 12px;
+            font-size: 13px;
+            border-radius: 0px;
           }
         }
         #nav-search-submit-btn {
@@ -429,18 +429,6 @@
   }
 }
 
-.sweet-modal {
-  background-color: #f7f7f7;
-}
-
-.sweet-modal.is-alert .sweet-content {
-  padding-top: 32px;
-  padding-bottom: 64px;
-}
-
-.sweet-modal-tab-title {
-  font-size: 20px;
-}
 
 .ticket {
   background-color: #ffffff;
