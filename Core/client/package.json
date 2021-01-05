@@ -13,7 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/vue-fontawesome": "^0.1.8",
     "airlines-iata-codes": "^1.0.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "buefy": "^0.7.10",
     "bulma": "^0.7.5",
     "core-js": "^2.6.10",
