@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "firebase-admin": "^8.8.0",
     "fs": "0.0.1-security",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "morgan": "^1.9.1",
     "skypicker": "^1.0.3"
   }
